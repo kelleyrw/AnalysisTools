@@ -1,0 +1,7 @@
+<use name="rootcore"/>
+<use name="boost"/>
+<use name="boost_filesystem"/>
+<use name="boost_regex"/>
+<export>
+  <lib name="1"/>
+</export>

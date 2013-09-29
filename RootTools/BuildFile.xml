@@ -1,0 +1,7 @@
+<use name="rootcore"/>
+<use name="rootgraphics"/>
+<use name="boost"/>
+<use name="AnalysisTools/LanguageTools"/>
+<export>
+  <lib name="1"/>
+</export>

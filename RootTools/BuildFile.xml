@@ -1,5 +1,6 @@
 <use name="rootcore"/>
 <use name="rootgraphics"/>
+<use name="rootrflx"/>
 <use name="boost"/>
 <use name="AnalysisTools/LanguageTools"/>
 <export>

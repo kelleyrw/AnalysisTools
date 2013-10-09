@@ -25,6 +25,13 @@ namespace lt
         return str_vector; 
     }
 
+    // join the string into a delim seperated list 
+    std::string string_join(const std::vector<std::string>& str_vector, const std::string& delim)
+    {
+        std::string result = boost::join(str_vector, delim);
+        return result; 
+    }
+
     // remove all occurrences of sub_str from str
     std::string string_remove_all(const std::string& str, const std::string& sub_str)
     {

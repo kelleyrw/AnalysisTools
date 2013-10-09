@@ -34,6 +34,9 @@ namespace lt
     // split the string into a vector of string based on the deliminator 
     std::vector<std::string> string_split(const std::string& str, const std::string& delim = ",");
 
+    // join the string into a delim seperated list 
+    std::string string_join(const std::vector<std::string>& str_vector, const std::string& delim = ",");
+
     // character is space
     bool is_space(const char c);
 

@@ -2,6 +2,7 @@
 #include "AnalysisTools/LanguageTools/interface/is_zero.h"
 #include "AnalysisTools/LanguageTools/interface/is_equal.h"
 #include "AnalysisTools/LanguageTools/interface/StringTools.h"
+#include "AnalysisTools/LanguageTools/interface/OSTools.h"
 
 // helper and functions for ROOT TH1 related operations (uses ROOT name conventions)
 // -------------------------------------------------------------------------------------------------//
@@ -110,6 +111,115 @@ namespace rt
     {
         TFile* file = rt::OpenRootFile(filename);
         return rt::GetVectorOfTH1s(file, root_file_dir);
+    }
+
+    // save the contents of the map to a root file
+    void Write
+    (
+        std::map<std::string, TH1*>& hist_map, 
+        const std::string& file_name, 
+        const std::string& root_file_dir,
+        const std::string& option
+    )
+    {
+        lt::mkdir(lt::dirname(file_name), /*recursive=*/true);
+
+        TFile* output_file = TFile::Open(file_name.c_str(), option.c_str());
+        output_file->cd("");
+        if (!output_file->cd(root_file_dir.c_str()))
+        {
+            output_file->mkdir(root_file_dir.c_str());
+        }
+        output_file->cd(root_file_dir.c_str());
+
+        for (std::map<std::string, TH1*>::iterator itr = hist_map.begin(); itr != hist_map.end(); itr++)
+        {
+            itr->second->Write(itr->first.c_str(), TObject::kOverwrite);
+        }
+        output_file->Close();
+        return;
+    }
+
+    void Write
+    (
+         std::map<std::string, TH1*>& hist_map, 
+         TFile* const root_file,
+         const std::string& root_file_dir
+    )
+    {
+        if (root_file->IsZombie()) 
+        {
+            throw std::runtime_error(std::string("[rt::Write] Error: '") + root_file->GetName() + "' not found or empty.  Aborting!");
+        }
+
+        root_file->cd("");
+        if (!root_file->cd(root_file_dir.c_str()))
+        {
+            root_file->mkdir(root_file_dir.c_str());
+        }
+        root_file->cd(root_file_dir.c_str());
+
+        for (std::map<std::string, TH1*>::iterator itr = hist_map.begin(); itr != hist_map.end(); itr++)
+        {
+            itr->second->Write(itr->first.c_str(), TObject::kOverwrite);
+        }
+        return;
+    }
+
+
+    // save the contents of the vector to a root file
+    void Write
+    (
+        std::vector<TH1*>& hist_vector, 
+        const std::string& file_name, 
+        const std::string& root_file_dir,
+        const std::string& option
+    )
+    {
+        lt::mkdir(lt::dirname(file_name), /*recursive=*/true);
+
+        TFile* output_file = TFile::Open(file_name.c_str(), option.c_str());
+        output_file->cd("");
+        if (!output_file->cd(root_file_dir.c_str()))
+        {
+            output_file->mkdir(root_file_dir.c_str());
+        }
+        output_file->cd(root_file_dir.c_str());
+
+        for (std::vector<TH1*>::iterator itr = hist_vector.begin(); itr != hist_vector.end(); itr++)
+        {
+            (*itr)->Write((*itr)->GetName(), TObject::kOverwrite);
+        }
+        output_file->Close();
+        return;
+    }
+
+    // save a histogram to a file 
+    void Write
+    (
+        const TH1* const hist_ptr, 
+        const std::string& file_name, 
+        const std::string& root_file_dir,
+        const std::string& option
+    )
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("[rt::Write] Warning: histogram pointer is NULL!");
+        }
+
+        lt::mkdir(lt::dirname(file_name), /*recursive=*/true);
+        TFile* output_file = TFile::Open(file_name.c_str(), option.c_str());
+        output_file->cd("");
+        if (!output_file->cd(root_file_dir.c_str()))
+        {
+            output_file->mkdir(root_file_dir.c_str());
+        }
+        output_file->cd(root_file_dir.c_str());
+
+        hist_ptr->Write(hist_ptr->GetName(), TObject::kOverwrite);
+        output_file->Close();
+        return;
     }
 
     // make an efficiency plot by dividing the two histograms 

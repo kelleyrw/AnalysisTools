@@ -1,5 +1,6 @@
 #include "AnalysisTools/RootTools/interface/TH1Container.h"
 #include "AnalysisTools/RootTools/interface/TH1Tools.h"
+#include "AnalysisTools/LanguageTools/interface/OSTools.h"
 
 // c++ includes
 #include <iostream>
@@ -11,6 +12,7 @@
 #include "TClass.h"
 #include "TDirectory.h"
 #include "TPad.h"
+#include "TCanvas.h"
 
 // boost includes
 #include <boost/shared_ptr.hpp>
@@ -476,18 +478,57 @@ namespace rt
 
     void TH1Container::Write(const std::string& file_name, const std::string& root_file_dir, const std::string& option) const
     {
-        //rt::Write(m_pimpl->hist_map, file_name, root_file_dir, option);
+        lt::mkdir(lt::dirname(file_name), /*recursive=*/true);
+        TFile* output_file = TFile::Open(file_name.c_str(), option.c_str());
+        Write(output_file, root_file_dir);
+        return;
     }
 
     void TH1Container::Write(TFile* root_file, const std::string& root_file_dir) const
     {
-        //rt::Write(m_pimpl->hist_map, root_file, root_file_dir);
+        root_file->cd("");
+        if (!root_file->cd(root_file_dir.c_str()))
+        {
+            root_file->mkdir(root_file_dir.c_str());
+        }
+        root_file->cd(root_file_dir.c_str());
+
+        for (std::map<std::string, boost::shared_ptr<TH1> >::iterator itr = m_pimpl->hist_map.begin(); itr != m_pimpl->hist_map.end(); itr++)
+        {
+            itr->second->Write(itr->first.c_str(), TObject::kOverwrite);
+        }
+        root_file->Close();
     }
 
     void TH1Container::Print(const std::string& dir_name, const std::string& suffix, const std::string& option, bool logy) const
     {
         //rt::mkdir(dir_name, /*force=*/true);
         //rt::Print(m_pimpl->hist_map, dir_name, suffix, option, logy);
+        if (not (suffix == "eps" or suffix == "png" or suffix == "pdf" ))
+        {
+            cout << "suffix " << suffix << " not valid!  No print." << endl;
+            return;
+        }
+
+        TCanvas c1("c1_Print_temp", "c1_Print_temp");
+        c1.SetLogy(logy);
+        c1.cd();
+
+        lt::mkdir(dir_name, /*recursive=*/true);
+
+        for (std::map<std::string, boost::shared_ptr<TH1> >::iterator itr = m_pimpl->hist_map.begin(); itr != m_pimpl->hist_map.end(); itr++)
+        {
+            if (!itr->second)
+            {
+                cout << "rt::Print() Warning: Object associated to " 
+                    << itr->first << " is NULL -- skipping!" << endl;
+                continue;
+            }
+            itr->second->Draw(option.c_str());
+            c1.Print((dir_name + "/" + itr->first + "." + suffix).c_str());
+        }
+//         rt::CopyIndexPhp(dir_name);
+        return;
     }
 
     // verbosity setting

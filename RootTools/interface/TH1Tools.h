@@ -41,40 +41,40 @@ namespace rt
     // get all the hists from a root file (given a filename) in a vector of hist pointers 
     std::vector<TH1*> GetVectorOfTH1s(const std::string& filename, const std::string& root_file_dir = "");
 
-//    // save the contents of the map to a root file
-//    void Write
-//    (
-//         std::map<std::string, TH1*>& hist_map, 
-//         const std::string& file_name, 
-//         const std::string& root_file_dir = "",
-//         const std::string& option = "UPDATE"
-//    );
-//
-//    void Write
-//    (
-//         std::map<std::string, TH1*>& hist_map, 
-//         TFile* root_file,
-//         const std::string& root_file_dir = ""
-//    );
-//
-//    // save the contents of the vector to a root file
-//    void Write
-//    (
-//         std::vector<TH1*>& hist_vector, 
-//         const std::string& file_name, 
-//         const std::string& root_file_dir = "",
-//         const std::string& option = "UPDATE"
-//    );
-//
-//    // save a hist to a ROOT file 
-//    void Write
-//    (
-//         const TH1* const hist_ptr, 
-//         const std::string& file_name, 
-//         const std::string& root_file_dir = "",
-//         const std::string& option = "UPDATE"
-//    );
-//
+   // save the contents of the map to a root file
+   void Write
+   (
+        std::map<std::string, TH1*>& hist_map, 
+        const std::string& file_name, 
+        const std::string& root_file_dir = "",
+        const std::string& option = "UPDATE"
+   );
+
+   void Write
+   (
+        std::map<std::string, TH1*>& hist_map, 
+        TFile* root_file,
+        const std::string& root_file_dir = ""
+   );
+
+   // save the contents of the vector to a root file
+   void Write
+   (
+        std::vector<TH1*>& hist_vector, 
+        const std::string& file_name, 
+        const std::string& root_file_dir = "",
+        const std::string& option = "UPDATE"
+   );
+
+   // save a hist to a ROOT file 
+   void Write
+   (
+        const TH1* const hist_ptr, 
+        const std::string& file_name, 
+        const std::string& root_file_dir = "",
+        const std::string& option = "UPDATE"
+   );
+
 //    // print the histogram to eps/png/pdt
 //    void Print
 //    (
@@ -268,6 +268,6 @@ namespace rt
 } // namespace rt
 
 // definitions of templated functions
-#include "TH1Store.impl.h"
+#include "TH1Tools.impl.h"
 
 #endif // RT_TH1TOOLS_H

@@ -86,4 +86,54 @@ namespace rt
         return chain;
     }
 
+    
+    // print list of files in a TChain
+    void PrintFilesFromTChain(const TChain& chain)
+    {
+        std::cout << "[rt::PrintFilesFromTChain]:\n" << chain.GetName() << "\t# entries:  " << chain.GetEntries() << std::endl;
+        TObjArray* list = chain.GetListOfFiles();
+        for (int i = 0; i < list->GetEntries(); i++)
+        {
+            std::cout << "  " << list->At(i)->GetTitle() << std::endl;
+        }
+        return;
+    }
+
+    // print list of files in a TChain
+    void PrintFilesFromTChain(TChain* chain)
+    {
+        if (!chain)
+        {
+            std::cout << "[rt::PrintFilesFromTChain] Error: chain is NULL" << std::endl;
+            return;
+        }
+        PrintFilesFromTChain(*chain);
+        return;
+    }
+
+    // print list of files in a vector of TChain
+    void PrintFilesFromTChain(std::vector<TChain*> chains)
+    {
+        for (std::vector<TChain*>::const_iterator ichain = chains.begin(); ichain != chains.end(); ichain++)
+        {
+            PrintFilesFromTChain(*ichain);
+        }
+    }
+
+    // resturn a vector of files in a TChain
+    std::vector<std::string> GetFilesFromTChain(TChain* chain)
+    {
+        if (!chain)
+        {
+            throw std::runtime_error("[rt::PrintFilesFromTChain] Error: chain is NULL");
+        }
+        std::vector<std::string> result;
+        TObjArray* list = chain->GetListOfFiles();
+        for (int i = 0; i < list->GetEntries(); i++)
+        {
+            result.push_back(list->At(i)->GetTitle());
+        }
+        return result;
+    }
+
 } // namespace rt

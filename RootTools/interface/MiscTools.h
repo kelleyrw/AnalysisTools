@@ -39,11 +39,6 @@ namespace rt
 //          bool logy = false
 //     );
 
-    // print list of files in a TChain
-//     void PrintFilesFromTChain(TChain* chain);
-//     void PrintFilesFromTChain(const TChain& chain);
-//     void PrintFilesFromTChain(std::vector<TChain*> chains);
-
 	// make a TChain from a path
 	TChain* MakeTChain
 	(
@@ -62,9 +57,14 @@ namespace rt
 		const std::string& prefix = "" 
 	);
 
-//     // print list of files in a TChain
-//     std::vector<std::string> GetFilesFromTChain(TChain* chain);
-// 
+    // print list of files in a TChain
+    void PrintFilesFromTChain(TChain* chain);
+    void PrintFilesFromTChain(const TChain& chain);
+    void PrintFilesFromTChain(std::vector<TChain*> chains);
+
+    // print list of files in a TChain
+    std::vector<std::string> GetFilesFromTChain(TChain* chain);
+
 //     // add root files (returns 0 if successful) -- lower case to match the utility name
 //     int hadd(const std::string& target, const std::vector<std::string>& sources);
 // 

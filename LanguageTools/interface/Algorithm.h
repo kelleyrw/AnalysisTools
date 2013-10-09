@@ -29,6 +29,6 @@ namespace lt
 } // namespace lt
 
 // templated function definitions
-#include "Algorithms.impl.h"
+#include "AnalysisTools/LanguageTools/interface/Algorithm.impl.h"
 
 #endif // LT_ALGORITHM_H

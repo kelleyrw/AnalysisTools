@@ -1,6 +1,8 @@
 // helper functions for containers (uses c++ name conventions)
 // ------------------------------------------------------------------//
 
+#include <algorithm>
+
 namespace lt
 {
     // copy a container filtering on predicate
@@ -41,6 +43,7 @@ namespace lt
     struct delete_ptr : public std::unary_function<bool,T>
     {
        bool operator()(T* ptr) const {delete ptr; return true;}
+       bool operator()(T ptr ) const {delete ptr; return true;}
     };
 
     // delete the container

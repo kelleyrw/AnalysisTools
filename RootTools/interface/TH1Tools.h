@@ -261,9 +261,14 @@ namespace rt
     // helper for low level objects 
     // -------------------------------------------------------------------------------------------------//
     
+    // find a "bin" in an const array given a value
     // only works on compile time arrays (e.g. float bins[] = {1,2,3};)
     template <int N> unsigned int find_bin(const float value, const float (&bins)[N]);
     template <int N> unsigned int find_bin(const double value, const double (&bins)[N]);
+
+    // find a "bin" in a vector given a value
+    unsigned int find_bin(const float value, const std::vector<float>& bins);
+    unsigned int find_bin(const double value, const std::vector<double>& bins);
 
 } // namespace rt
 

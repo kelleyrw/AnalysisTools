@@ -1038,5 +1038,36 @@ namespace rt
         return std::make_pair(entries, error);
     }
 
+    // find a "bin" in a vector given a value
+    unsigned int find_bin(const float value, const std::vector<float>& bins)
+    {
+        unsigned int index = 0;
+        for (size_t i=0; i != bins.size()-1; i++)
+        {
+            if (bins[i] < value && value < bins[i+1]) 
+            {
+                index=i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    // find a "bin" in a vector given a value
+    unsigned int find_bin(const double value, const std::vector<double>& bins)
+    {
+        unsigned int index = 0;
+        for (size_t i=0; i != bins.size()-1; i++)
+        {
+            if (bins[i] < value && value < bins[i+1]) 
+            {
+                index=i;
+                break;
+            }
+        }
+        return index;
+    }
+
+
 
 } // namespace rt

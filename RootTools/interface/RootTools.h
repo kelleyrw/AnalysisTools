@@ -1,11 +1,14 @@
 #ifndef RT_ROOTTOOLS_H
 #define RT_ROOTTOOLS_H
 
-// MiscTools
-#include "AnalysisTools/RootTools/interface/MiscTools.h"
+// TH1Tools
+#include "AnalysisTools/RootTools/interface/TH1Tools.h"
 
 // TH1Container
 #include "AnalysisTools/RootTools/interface/TH1Container.h"
+
+// MiscTools
+#include "AnalysisTools/RootTools/interface/MiscTools.h"
 
 // TH1Overlay
 // #include "AnalysisTools/RootTools/interface/TH1Overlay.h"

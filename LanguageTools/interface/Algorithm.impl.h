@@ -60,33 +60,4 @@ namespace lt
         std::for_each(c.begin(), c.end(), t);
     }
 
-    // only works on compile time arrays (e.g. float bins[] = {1,2,3};)
-    template <int N> unsigned int find_bin(const float value, const float (&bins)[N])
-    {
-        int index = 0;
-        for (size_t i=0; i != N-1; i++)
-        {
-            if (bins[i] < value && value < bins[i+1]) 
-            {
-                index=i;
-                break;
-            }
-        }
-        return index;
-    }
-
-    template <int N> unsigned int find_bin(const double value, const double (&bins)[N])
-    {
-        int index = 0;
-        for (size_t i=0; i != N-1; i++)
-        {
-            if (bins[i] < value && value < bins[i+1]) 
-            {
-                index=i;
-                break;
-            }
-        }
-        return index;
-    }
-
 } // namespace lt

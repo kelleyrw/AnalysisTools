@@ -14,7 +14,7 @@
 // #include "AnalysisTools/RootTools/interface/TH1Overlay.h"
 
 // TDR Style plots 
-// #include "AnalysisTools/RootTools/interface/TDRStyle.h"
+#include "AnalysisTools/RootTools/interface/TDRStyle.h"
 
 // Wrapper to Fill with over/underflow bins in the last/fist bin 
 // #include "AnalysisTools/RootTools/interface/FillHist.h"

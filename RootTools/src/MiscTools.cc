@@ -1,7 +1,7 @@
 #include "AnalysisTools/RootTools/interface/MiscTools.h"
 // #include "AnalysisTools/LanguageTools/interface/is_zero.h"
 // #include "AnalysisTools/LanguageTools/interface/is_equal.h"
-#include "AnalysisTools/LanguageTools/interface/StringTools.h"
+#include "AnalysisTools/LanguageTools/interface/LanguageTools.h"
 
 // miscellaneous helper and functions for ROOT related operations (uses ROOT name conventions)
 // -------------------------------------------------------------------------------------------------//
@@ -13,6 +13,10 @@
 
 // ROOT includes
 #include "TChain.h"
+#include "TStyle.h"
+#include "TROOT.h"
+#include "TAxis.h"
+#include "TGaxis.h"
 
 // namespace rt --> root tools
 namespace rt
@@ -134,6 +138,63 @@ namespace rt
             result.push_back(list->At(i)->GetTitle());
         }
         return result;
+    }
+
+    // set style
+    void SetStyle(const std::string& option)
+    {
+        TStyle *myStyle = gROOT->GetStyle("Plain");
+        TGaxis::SetMaxDigits(5);
+        myStyle->SetPaintTextFormat("1.3f");
+        myStyle->SetOptStat(option.c_str());
+        myStyle->SetOptFit(1111);
+        myStyle->SetTitleBorderSize(0);
+        myStyle->SetTitleFillColor(0);
+        myStyle->SetTitleStyle(0);
+        //myStyle->SetTitleX( 0.5 - 2.0*myStyle->GetTitleXSize() );
+        //myStyle->SetTitleX( 0.05 );
+        //myStyle->SetTitleY( 0.96 );
+        //myStyle->SetTitleAlign(22);
+        myStyle->SetLegendBorderSize(0);
+#if ROOT_VERSION_CODE >= ROOT_VERSION(5,30,0)
+        myStyle->SetLegendFillColor(0);
+#endif
+
+        //myStyle->SetTitleY(0.985);
+        myStyle->SetHistLineColor(kBlue);
+        myStyle->SetHistLineWidth(1);
+        myStyle->SetPadGridX(1);
+        myStyle->SetPadGridY(1);
+        myStyle->SetGridColor(kGray+1);
+        myStyle->SetCanvasDefW(600);
+        myStyle->SetCanvasDefH(600);
+        myStyle->SetStatH(0.09);
+        myStyle->SetStatW(0.2);
+        myStyle->SetStatX(0.99);
+        myStyle->SetStatY(0.99);
+        myStyle->SetStatBorderSize(myStyle->GetHistLineWidth());
+        myStyle->SetStatTextColor(kBlack);
+        myStyle->SetStatColor(0);
+        //myStyle->SetStatStyle(Style_t style = 1001);
+        //void SetStatBoxPosition(TH1* hist_ptr, float x1 = 0.8, float y1 = 0.8, float x2 = 1.0, float y2 = 1.0);
+
+        myStyle->SetTitleOffset(1.2, "Y");
+        myStyle->SetLabelSize(0.035, "Y");
+        myStyle->SetLabelSize(0.035, "X");
+        myStyle->cd();
+        gStyle = myStyle;
+    }
+
+    // copy the index.php file to dirname
+    void CopyIndexPhp(const std::string& target_dir)
+    {
+        if (!lt::file_exists(lt::dirname(target_dir)))
+        {
+            throw std::runtime_error("[rt::CopyIndexPhp] Error : destination directory doesn't exist");
+        }
+        std::string source = Form("%s/src/AnalysisTools/RootTools/tools/index.php", lt::getenv("CMSSW_BASE").c_str());
+        lt::copy_file(source, target_dir + "/index.php");
+        return;
     }
 
 } // namespace rt

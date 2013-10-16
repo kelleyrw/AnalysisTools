@@ -1,5 +1,6 @@
 #include "AnalysisTools/RootTools/interface/TH1Container.h"
 #include "AnalysisTools/RootTools/interface/TH1Tools.h"
+#include "AnalysisTools/RootTools/interface/MiscTools.h"
 #include "AnalysisTools/LanguageTools/interface/OSTools.h"
 
 // c++ includes
@@ -527,7 +528,7 @@ namespace rt
             itr->second->Draw(option.c_str());
             c1.Print((dir_name + "/" + itr->first + "." + suffix).c_str());
         }
-//         rt::CopyIndexPhp(dir_name);
+        rt::CopyIndexPhp(dir_name);
         return;
     }
 

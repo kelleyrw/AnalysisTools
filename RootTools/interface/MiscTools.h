@@ -84,6 +84,12 @@ namespace rt
 //     std::pair<double, double> DivideWithError(const std::pair<double, double>& v1, const std::pair<double, double>& v2);
 //     std::pair<float, float>   DivideWithError(const std::pair<float, float>& v1  , const std::pair<float, float>& v2  );
 
+    // Set style
+    void SetStyle(const std::string& value = "emrou");
+
+    // copy the index.php file to dirname
+    void CopyIndexPhp(const std::string& target_dir);
+
 } // namespace rt 
 
 // definitions of templated functions

@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <fstream>
+#include <sstream>
 
 // implementation of CTable
 // -----------------------------------------------------------------------------------------------------//
@@ -355,6 +356,39 @@ void CTable::saveTex(const std::string& filename){
     (*out_)<<"\\hline"<<std::endl<<"\\end{tabular}"<<std::endl
         <<"\\end{center}"<<std::endl<<"\\end{table}"<<std::endl
         <<"\\end{document}"<<std::endl;
+}
+
+std::string CTable::getTex() {
+    using namespace std;
+    std::string cols="c|";
+    for(size_t i=0;i<colLabels_.size();i++){cols+="c";}
+    std::stringstream os;
+    os  <<"\\begin{table}[ht!]"<<std::endl
+        <<"\\begin{center}"<<std::endl
+        <<"\\begin{tabular}{"<<cols<<"}\\hline"<<std::endl
+        <<" ";
+    for(size_t i=0;i<colLabels_.size();i++){
+        os   <<"&"<<colLabels_[i];
+    }
+    os   <<"\\\\"<<std::endl<<"\\hline \\hline"<<std::endl;
+    if(height_>0 || width_>0){
+        for(size_t i=0; i<height_; i++){
+            os   <<rowLabels_[i];
+            for(size_t j=0; j<width_; j++){
+                if(table_[i].size()>j){
+                    os   <<" & "<<table_[i][j];
+                }else{
+                    os   <<" &  ";
+                }
+            }
+            os   <<"\\\\"<<std::endl;
+        }
+    }else{
+        os   <<" & ->  Table Empty  <-"<<std::endl;
+    }  
+    os   <<"\\hline"<<std::endl<<"\\end{tabular}"<<std::endl
+        <<"\\end{center}"<<std::endl<<"\\end{table}"<<std::endl;
+    return os.str();
 }
 
 void CTable::printTex() const {

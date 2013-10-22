@@ -303,6 +303,17 @@ namespace rt
         }
     }
 
+    // get a list of all the histograms
+    std::vector<string> TH1Container::GetListOfHistograms() const
+    {
+        std::vector<std::string> result;
+        for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+        {
+            result.push_back(iter->first);
+        }
+        return result;
+    }
+
     //void usage()
     //{
     //    cout << "TH1Container::view() usage:" << endl;

@@ -81,6 +81,7 @@ class CTable{
         void saveAs(const std::string& filename, bool overwrite=true);
         void saveTex(const std::string& filename);
         void printTex() const;
+        std::string getTex();
 
         // non-memeber friend functions
         friend std::ostream& operator << (std::ostream& os, CTable& table);

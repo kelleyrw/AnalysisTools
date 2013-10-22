@@ -883,18 +883,18 @@ namespace rt
                 {                                                              
                     if (not xunit.empty())                                     
                     {                                                          
-                        string format = "%" + xprecision + "f " + xunit + " < \\%s < %" + xprecision + "f " + xunit;
+                        string format = "%" + xprecision + "f " + xunit + " $<$ s $<$ %" + xprecision + "f " + xunit;
                         xlabel = Form(format.c_str(), xmin, xtitle.c_str(), xmax);
                     }                                                          
                     else                                                       
                     {                                                          
-                        string format = "%" + xprecision + "f < \\%s < %" + xprecision + "f";
+                        string format = "%" + xprecision + "f $<$ %s $<$ %" + xprecision + "f";
                         xlabel = Form(format.c_str(), xmin, xtitle.c_str(), xmax);
                     }                                                          
                 }                                                              
                 else                                                           
                 {                                                              
-                    string format = "%" + xprecision + "f < \\%s < %" + xprecision + "f";
+                    string format = "%" + xprecision + "f $<$ %s $<$ %" + xprecision + "f";
                     xlabel = Form(format.c_str(), xmin, xaxis->GetTitle(), xmax);
                 }                                                              
                 table.setColLabel(xlabel, col);                                
@@ -911,18 +911,18 @@ namespace rt
                     {                                                          
                         if (not yunit.empty())                                 
                         {                                                      
-                            string format = "%" + yprecision + "f " + yunit + " < \\%s < %" + yprecision + "f " + yunit;
+                            string format = "%" + yprecision + "f " + yunit + " $<$ %s $<$ %" + yprecision + "f " + yunit;
                             ylabel = Form(format.c_str(), ymin, ytitle.c_str(), ymax);
                         }                                                      
                         else                                                   
                         {                                                      
-                            string format = "%" + yprecision + "f < \\%s < %" + yprecision + "f";
+                            string format = "%" + yprecision + "f $<$ %s $<$ %" + yprecision + "f";
                             ylabel = Form(format.c_str(), ymin, ytitle.c_str(), ymax);
                         }                                                      
                     }                                                          
                     else                                                       
                     {                                                          
-                        string format = "%" + yprecision + "f < \\%s < %" + yprecision + "f";
+                        string format = "%" + yprecision + "f $<$ %s $<$ %" + yprecision + "f";
                         ylabel = Form(format.c_str(), ymin, yaxis->GetTitle(), ymax);
                     }                                                          
                     table.setRowLabel(ylabel, row);                            
@@ -952,18 +952,18 @@ namespace rt
                 {                                                              
                     if (not xunit.empty())                                     
                     {                                                          
-                        string format = "%" + xprecision + "f " + xunit + " < \\%s < %" + xprecision + "f " + xunit;
+                        string format = "%" + xprecision + "f " + xunit + " $<$ %s $<$ %" + xprecision + "f " + xunit;
                         xlabel = Form(format.c_str(), xmin, xtitle.c_str(), xmax);
                     }                                                          
                     else                                                       
                     {                                                          
-                        string format = "%" + xprecision + "f < \\%s < %" + xprecision + "f";
+                        string format = "%" + xprecision + "f $<$ %s $<$ %" + xprecision + "f";
                         xlabel = Form(format.c_str(), xmin, xtitle.c_str(), xmax);
                     }                                                          
                 }                                                              
                 else                                                           
                 {                                                              
-                    string format = "%" + xprecision + "f < \\%s < %" + xprecision + "f";
+                    string format = "%" + xprecision + "f $<$ %s $<$ %" + xprecision + "f";
                     xlabel = Form(format.c_str(), xmin, xaxis->GetTitle(), xmax);
                 }                                                              
                 table.setRowLabel(xlabel, row);                                

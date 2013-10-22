@@ -6,10 +6,6 @@
 
 namespace lt
 {
-    // copy a container filtering on predicate
-    template <typename InputIterator, typename OutputIterator, typename Predicate >
-    OutputIterator copy_if(InputIterator first, InputIterator last, OutputIterator dest, Predicate p);
-
     // filter the container
     template <typename Container, typename Predicate>
     Container filter_container(const Container &c, Predicate p);

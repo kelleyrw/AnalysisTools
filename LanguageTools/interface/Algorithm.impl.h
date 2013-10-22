@@ -5,27 +5,12 @@
 
 namespace lt
 {
-    // copy a container filtering on predicate
-    template< typename InputIterator, typename OutputIterator, typename Predicate >
-    OutputIterator copy_if(InputIterator first, InputIterator last, OutputIterator dest, Predicate p)
-    {
-        for(;first != last; ++first)
-        {
-            if(p(*first))
-            {
-                *dest = *first;
-                ++dest;
-            }
-        }
-        return dest;
-    }
-
     // filter the container
     template<typename Container, typename Predicate>
     Container filter_container(const Container &c, Predicate p)
     {
         Container result;
-        copy_if(c.begin(), c.end(), std::back_inserter(result), p);
+        std::copy_if(c.begin(), c.end(), std::back_inserter(result), p);
         return result;
     }
 

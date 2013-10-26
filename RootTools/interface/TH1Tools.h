@@ -41,70 +41,70 @@ namespace rt
     // get all the hists from a root file (given a filename) in a vector of hist pointers 
     std::vector<TH1*> GetVectorOfTH1s(const std::string& filename, const std::string& root_file_dir = "");
 
-   // save the contents of the map to a root file
-   void Write
-   (
-        std::map<std::string, TH1*>& hist_map, 
-        const std::string& file_name, 
-        const std::string& root_file_dir = "",
-        const std::string& option = "UPDATE"
-   );
+    // save the contents of the map to a root file
+    void Write
+    (
+         std::map<std::string, TH1*>& hist_map, 
+         const std::string& file_name, 
+         const std::string& root_file_dir = "",
+         const std::string& option = "UPDATE"
+    );
 
-   void Write
-   (
-        std::map<std::string, TH1*>& hist_map, 
-        TFile* root_file,
-        const std::string& root_file_dir = ""
-   );
+    void Write
+    (
+         std::map<std::string, TH1*>& hist_map, 
+         TFile* root_file,
+         const std::string& root_file_dir = ""
+    );
 
-   // save the contents of the vector to a root file
-   void Write
-   (
-        std::vector<TH1*>& hist_vector, 
-        const std::string& file_name, 
-        const std::string& root_file_dir = "",
-        const std::string& option = "UPDATE"
-   );
+    // save the contents of the vector to a root file
+    void Write
+    (
+         std::vector<TH1*>& hist_vector, 
+         const std::string& file_name, 
+         const std::string& root_file_dir = "",
+         const std::string& option = "UPDATE"
+    );
 
-   // save a hist to a ROOT file 
-   void Write
-   (
-        const TH1* const hist_ptr, 
-        const std::string& file_name, 
-        const std::string& root_file_dir = "",
-        const std::string& option = "UPDATE"
-   );
+    // save a histogram to a ROOT file 
+    void Write
+    (
+         const TH1* const hist_ptr, 
+         const std::string& file_name, 
+         const std::string& root_file_dir = "",
+         const std::string& option = "UPDATE"
+    );
 
-//    // print the histogram to eps/png/pdt
-//    void Print
-//    (
-//         const TH1* const hist_ptr, 
-//         const std::string& dir_name, 
-//         const std::string& suffix = "png", 
-//         const std::string& file_name = "", 
-//         const std::string& option = "",
-//         const bool logy = false
-//    );
-//
-//    // print the plots to eps/png/pdf 
-//    void Print
-//    (
-//         std::map<std::string, TH1*>& hist_map, 
-//         const std::string& dir_name, 
-//         const std::string& suffix = "png",
-//         const std::string& option = "",
-//         bool logy = false
-//    );
-//
-//    // print the plots to eps/png/pdf 
-//    void Print
-//    (
-//         std::vector<TH1*>& hist_vector, 
-//         const std::string& dir_name, 
-//         const std::string& suffix = "png",
-//         const std::string& option = "",
-//         bool logy = false
-//    );
+    // print the histogram to eps/png/pdf
+    void Print
+    (
+         const TH1* const hist_ptr, 
+         const std::string& dir_name, 
+         const std::string& suffix = "png", 
+         const std::string& file_name = "", 
+         const std::string& option = "",
+         const bool logy = false
+    );
+
+    // print the map of histograms to eps/png/pdf 
+    void Print
+    (
+         std::map<std::string, TH1*>& hist_map, 
+         const std::string& dir_name, 
+         const std::string& suffix = "png",
+         const std::string& option = "",
+         const bool logy = false
+    );
+
+    // print the vector of histograms to eps/png/pdf 
+    void Print
+    (
+         std::vector<TH1*>& hist_vector, 
+         const std::string& dir_name, 
+         const std::string& suffix = "png",
+         const std::string& option = "",
+         const bool logy = false
+    );
     
     // make an efficiency plot by dividing the two histograms 
     TH1* MakeEfficiencyPlot
@@ -112,7 +112,7 @@ namespace rt
         TH1* const num_hist, 
         TH1* const den_hist, 
         const std::string& name = "h_eff", 
-        const std::string& title = ""
+        const std::string& title = "" // uses name if blank
     );
     
     // make a 2D efficiency plot by dividing the two histograms 
@@ -121,7 +121,7 @@ namespace rt
         TH1* const num_hist, 
         TH1* const den_hist, 
         const std::string& name = "h_eff2D",
-        const std::string& title = ""
+        const std::string& title = "" // uses name if blank
     );
     
     TH2* MakeEfficiencyPlot2D
@@ -129,7 +129,7 @@ namespace rt
         TH2* const num_hist, 
         TH2* const den_hist, 
         const std::string& name = "h_eff2D",
-        const std::string& title = ""
+        const std::string& title = "" // uses name if blank
     );
     
     // create a Projection from 2D hist 
@@ -137,8 +137,8 @@ namespace rt
     (
         TH2* const hist, 
         const std::string& axis = "x", 
-        const std::string& name = "", 
-        const std::string& title = "", 
+        const std::string& name = "",   // if blank, uses hist->GetName() + "_proj"
+        const std::string& title = "",  // if blank, uses hist->GetTitle() + " projection"
         double low = 0.0, 
         double high = -1.0,
         const std::string& option = ""
@@ -150,8 +150,8 @@ namespace rt
         TH2* const num_hist, 
         TH2* const den_hist, 
         const std::string& axis = "x", 
-        const std::string& name = "", 
-        const std::string& title = "", 
+        const std::string& name = "",  // if blank, uses hist->GetName() + "_proj"
+        const std::string& title = "", // if blank, uses hist->GetTitle() + " projection" 
         double low = 0.0, 
         double high = -1.0,
         const std::string& option = ""
@@ -164,28 +164,33 @@ namespace rt
         TH1* const num_hist,  
         TH1* const den_hist, 
         const std::string& axis = "x", 
-        const std::string& name = "", 
-        const std::string& title = "", 
+        const std::string& name = "",  // if blank, uses hist->GetName() + "_proj"
+        const std::string& title = "", // if blank, uses hist->GetTitle() + " projection"  
         double low = 0.0, 
         double high = -1.0,
         const std::string& option = ""
     );
     
     // add Hists and return new hist (client is owner of the TH1*)
+    // if title is empty, uses h1's name
     TH1* AddHists(TH1* const h1, TH1* const h2, const std::string& name, const std::string& title = "");
     TH1* AddHists(TH1* const h1, TH1* const h2, TH1* const h3, const std::string& name, const std::string& title = "");
     
     // subtract Hists and return new hist (client is owner of the TH1*)
+    // if title is empty, uses h1's name
     TH1* SubtractHists(TH1* const h1, TH1* const h2, const std::string& name, const std::string& title = "");
     
     // divide Hists and return new hist (client is owner of the TH1*)
+    // if title is empty, uses h1's name
     TH1* DivideHists(TH1* const h_num, TH1* const h_den, const std::string& name, const std::string& title = "", const std::string& option = "");
     
     // multiply Hists and return new hist (client is owner of the TH1*)
+    // if title is empty, uses h1's name
     TH1* MultiplyHists(TH1* const h1, TH1* const h2, const std::string& name, const std::string& title = "", const std::string& option = "");
     
     // subtract Hists and then divide by the first and return new hist (client is owner of the TH1*)
     // rel diff = (h1 - h2)/h1
+    // if title is empty, uses h1's name
     TH1* RelativeDiffHists(TH1* const h1, TH1* const h2, const std::string& name, const std::string& title = "");
     
     // mask off all values that are in the range and set the values to zero 
@@ -273,6 +278,6 @@ namespace rt
 } // namespace rt
 
 // definitions of templated functions
-#include "TH1Tools.impl.h"
+#include "AnalysisTools/RootTools/src/TH1Tools.impl.h"
 
 #endif // RT_TH1TOOLS_H

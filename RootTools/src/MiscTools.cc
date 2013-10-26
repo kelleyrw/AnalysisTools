@@ -17,6 +17,7 @@
 #include "TROOT.h"
 #include "TAxis.h"
 #include "TGaxis.h"
+#include "TFileMerger.h"
 
 // namespace rt --> root tools
 namespace rt
@@ -90,7 +91,6 @@ namespace rt
         return chain;
     }
 
-    
     // print list of files in a TChain
     void PrintFilesFromTChain(const TChain& chain)
     {
@@ -138,6 +138,117 @@ namespace rt
             result.push_back(list->At(i)->GetTitle());
         }
         return result;
+    }
+
+    // add root files (returns 0 if successful) -- lower case to match the utility name
+    int hadd(const std::string& target, const std::vector<std::string>& sources)
+    {
+        // create the target folder (if it doesn't exist)
+        if (!lt::file_exists(lt::dirname(target)))
+        {
+            lt::mkdir(lt::dirname(target));
+        }
+
+        // test if its has valid root files -- if not, then quit
+        if(sources.empty())
+        {
+            std::cout << "[rt::hadd] Error: No sources to process.  Exiting..." << std::endl;
+            return 1;
+        }
+
+        // build merger
+        TFileMerger file_merger;
+        for (size_t i = 0, size = sources.size(); i != size; i++) 
+        { 
+            file_merger.AddFile(sources.at(i).c_str());
+        }
+
+        // open output file
+        const bool opened = file_merger.OutputFile(target.c_str());
+        if (not opened)
+        {
+            std::cout << "[rt::hadd] Error: opening target failed.  Exiting...\n" << std::endl;
+            return 1;
+        }
+
+        // merge
+        const bool merged = file_merger.Merge();
+        if (not merged)
+        {
+            std::cout << "[rt::hadd] Error: merge failed.  Exiting...\n" << std::endl;
+            return 1;
+        }
+
+        return 0;
+    }
+
+    
+    // Add with error
+    std::pair<double, double> AddWithError(const std::pair<double, double>& v1, const std::pair<double, double>& v2)
+    {
+        double result = v1.first + v2.first;
+        double error  = sqrt(pow(v1.second, 2) + pow(v2.second, 2));
+        return std::make_pair(result, error);
+    }
+
+    std::pair<float, float> AddWithError(const std::pair<float, float>& v1, const std::pair<float, float>& v2)
+    {
+        std::pair<double, double> double_v1(v1.first, v1.second);
+        std::pair<double, double> double_v2(v2.first, v2.second);
+        std::pair<double, double> result = AddWithError(double_v1, double_v2);
+        return std::make_pair(static_cast<float>(result.first), static_cast<float>(result.second));
+    }
+
+    // Subtract with error
+    std::pair<double, double> SubtractWithError(const std::pair<double, double>& v1, const std::pair<double, double>& v2)
+    {
+        double result = v1.first - v2.first;
+        double error  = sqrt(pow(v1.second, 2) + pow(v2.second, 2));
+        return std::make_pair(result, error);
+    }
+
+    std::pair<float, float> SubtractWithError(const std::pair<float, float>& v1, const std::pair<float, float>& v2)
+    {
+        std::pair<double, double> double_v1(v1.first, v1.second);
+        std::pair<double, double> double_v2(v2.first, v2.second);
+        std::pair<double, double> result = SubtractWithError(double_v1, double_v2);
+        return std::make_pair(static_cast<float>(result.first), static_cast<float>(result.second));
+    }
+
+    // Multiply with error
+    std::pair<double, double> MultiplyWithError(const std::pair<double, double>& v1, const std::pair<double, double>& v2)
+    {
+        double result = v1.first * v2.first;
+        double error  = std::abs(result) * sqrt(pow(v1.second/v1.first, 2) + pow(v2.second/v2.first, 2));
+        return std::make_pair(result, error);
+    }
+
+    std::pair<float, float> MultiplyWithError(const std::pair<float, float>& v1, const std::pair<float, float>& v2)
+    {
+        std::pair<double, double> double_v1(v1.first, v1.second);
+        std::pair<double, double> double_v2(v2.first, v2.second);
+        std::pair<double, double> result = MultiplyWithError(double_v1, double_v2);
+        return std::make_pair(static_cast<float>(result.first), static_cast<float>(result.second));
+    }
+
+    // Divide with error
+    std::pair<double, double> DivideWithError(const std::pair<double, double>& v1, const std::pair<double, double>& v2)
+    {
+        if (is_equal(v2.first, 0.0))
+        {
+            throw std::runtime_error("[rt::DivideWithError] Error: attempting to divide by zero!");
+        }
+        double result = v1.first / v2.first;
+        double error  = std::abs(result) * sqrt(pow(v1.second/v1.first, 2) + pow(v2.second/v2.first, 2));
+        return std::make_pair(result, error);
+    }
+
+    std::pair<float, float> DivideWithError(const std::pair<float, float>& v1, const std::pair<float, float>& v2)
+    {
+        std::pair<double, double> double_v1(v1.first, v1.second);
+        std::pair<double, double> double_v2(v2.first, v2.second);
+        std::pair<double, double> result = DivideWithError(double_v1, double_v2);
+        return std::make_pair(static_cast<float>(result.first), static_cast<float>(result.second));
     }
 
     // set style

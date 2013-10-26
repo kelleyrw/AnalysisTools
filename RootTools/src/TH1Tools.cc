@@ -1,4 +1,5 @@
 #include "AnalysisTools/RootTools/interface/TH1Tools.h"
+#include "AnalysisTools/RootTools/interface/MiscTools.h"
 #include "AnalysisTools/LanguageTools/interface/is_zero.h"
 #include "AnalysisTools/LanguageTools/interface/is_equal.h"
 #include "AnalysisTools/LanguageTools/interface/StringTools.h"
@@ -11,8 +12,10 @@
 #include <stdexcept>
 #include <iostream>
 #include <cmath>
+#include <map>
 
 // ROOT includes
+#include "TCanvas.h"
 #include "TPad.h"
 #include "TPaveStats.h"
 
@@ -104,7 +107,7 @@ namespace rt
         return hist_vec;
     }
 
-    // get all the hists from a root file (given a filename) in a map of hist pointers 
+    // get all the hists from a root file (given a filename) in a vector of hist pointers 
     // (give empty map if dir is incorrect or emptry)
     // (throws if file not found)
     std::vector<TH1*> GetVectorOfTH1s(const std::string& filename, const std::string& root_file_dir)
@@ -221,6 +224,122 @@ namespace rt
         output_file->Close();
         return;
     }
+
+    // print the histogram to eps/png/pdf 
+    void Print
+    (
+        TH1* const hist_ptr, 
+        const std::string& dir_name, 
+        const std::string& suffix,
+        const std::string& file_name,
+        const std::string& option,
+        const bool logy
+    )
+    {
+        if (not(suffix == "eps" || suffix == "png" || suffix == "pdf"))
+        {
+            std::cout << "suffix " << suffix << " not valid!  No print." << std::endl;
+            return;
+        }
+
+        TCanvas c1("c1_Print_temp", "c1_Print_temp");
+        c1.SetLogy(logy);
+        c1.cd();
+
+        lt::mkdir(dir_name, /*recursive=*/true);
+
+        if (!hist_ptr)
+        {
+            std::cout << "rt::Print() Error: hist_ptr is NULL" << std::endl;
+            return;
+        }
+        hist_ptr->Draw(option.c_str());
+        std::string output_file_name = "";
+        if (file_name.empty())
+        {
+            output_file_name = Form("%s/%s.%s", dir_name.c_str(), hist_ptr->GetName(), suffix.c_str());
+        }
+        else
+        {
+            output_file_name = Form("%s/%s.%s", dir_name.c_str(), file_name.c_str(), suffix.c_str());
+        }
+        c1.Print(output_file_name.c_str());
+        rt::CopyIndexPhp(dir_name);
+        return;
+    }
+
+    // print the map of histograms to eps/png/pdf 
+    void Print
+    (
+        std::map<std::string, TH1*>& hist_map, 
+        const std::string& dir_name, 
+        const std::string& suffix,
+        const std::string& option,
+        const bool logy
+    )
+    {
+        if (not(suffix == "eps" || suffix == "png" || suffix == "pdf"))
+        {
+            std::cout << "suffix " << suffix << " not valid!  No print." << std::endl;
+            return;
+        }
+
+        TCanvas c1("c1_Print_temp", "c1_Print_temp");
+        c1.SetLogy(logy);
+        c1.cd();
+
+        lt::mkdir(dir_name, /*recursive=*/true);
+
+        for (std::map<std::string, TH1*>::const_iterator itr = hist_map.begin(); itr != hist_map.end(); itr++)
+        {
+            if (!itr->second)
+            {
+                std::cout << "rt::Print() Warning: Object associated to " << itr->first << " is NULL -- skipping!" << std::endl;
+                continue;
+            }
+            itr->second->Draw(option.c_str());
+            c1.Print((dir_name + "/" + itr->first + "." + suffix).c_str());
+        }
+        rt::CopyIndexPhp(dir_name);
+        return;
+    }
+
+    // print the vector of histograms to eps/png/pdf 
+    void Print
+    (
+        std::vector<TH1*>& hist_vector, 
+        const std::string& dir_name, 
+        const std::string& suffix,
+        const std::string& option,
+        const bool logy
+    )
+    {
+        if (not(suffix == "eps" || suffix == "png" || suffix == "pdf"))
+        {
+            std::cout << "suffix " << suffix << " not valid!  No print." << std::endl;
+            return;
+        }
+
+        TCanvas c1("c1_Print_temp", "c1_Print_temp");
+        c1.SetLogy(logy);
+        c1.cd();
+
+        lt::mkdir(dir_name, /*recursive=*/true);
+
+        for(size_t i = 0; i < hist_vector.size(); i++)
+        {
+            if (!hist_vector.at(i))
+            {
+                std::cout << "rt::Print() Warning: Object is NULL -- skipping! " << std::endl;
+                continue;
+            }
+            hist_vector.at(i)->Draw(option.c_str());
+            c1.Print((dir_name + "/" +  hist_vector.at(i)->GetName() + "." + suffix).c_str());
+        }
+        rt::CopyIndexPhp(dir_name);
+        return;
+    }
+    
 
     // make an efficiency plot by dividing the two histograms 
     TH1* MakeEfficiencyPlot(TH1* num_hist, TH1* den_hist, const std::string& name, const std::string& title)
@@ -528,6 +647,47 @@ namespace rt
         h_result->Divide(h2, h1, 1.0, 1.0);
         h_result->Add(h_unity, h_result, 1.0, -1.0);
         return h_result;
+    }
+
+    // mask off all values that are in the range and set the values to zero 
+    void MaskHist2D(TH1* hist, std::string axis_label, const float low, const float high)
+    {
+        // check that hists are valid
+        if (!hist)
+        {
+            throw std::runtime_error("[rt::MaskHist2D] Error: Histograms are NULL");
+        }
+        if (!dynamic_cast<TH2*>(hist))
+        {
+            throw std::runtime_error("[rt::MaskHist2D] Error: Histograms is not 2D");
+        }
+
+        // check that axis is setup to an one of the apppriate values
+        axis_label = lt::string_lower(axis_label);
+        if (axis_label != "x" && axis_label != "y") 
+        {
+            throw std::runtime_error("[rt::MaskHist2D] Error: Invalid axis choice (\"X\" or \"Y\")");
+        }
+
+        for (int xbin = 1; xbin != hist->GetXaxis()->GetNbins()+1; xbin++)
+        {
+            const float xvalue = hist->GetXaxis()->GetBinCenter(xbin);
+            for (int ybin = 1; ybin != hist->GetYaxis()->GetNbins()+1; ybin++)
+            {
+                const float yvalue = hist->GetYaxis()->GetBinCenter(ybin);
+                if (axis_label == "x" && low <= xvalue && xvalue <= high)
+                {
+                    hist->SetBinContent(xbin, ybin, 0.0f);
+                    hist->SetBinError(xbin, ybin, 0.0f);
+                }
+                if (axis_label == "y" && low <= yvalue && yvalue <= high)
+                {
+                    hist->SetBinContent(xbin, ybin, 0.0f);
+                    hist->SetBinError(xbin, ybin, 0.0f);
+                }
+            }
+        }
+        return;
     }
 
     // maximum value in hist 
@@ -1067,7 +1227,5 @@ namespace rt
         }
         return index;
     }
-
-
 
 } // namespace rt

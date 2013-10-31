@@ -1,6 +1,6 @@
 #include "AnalysisTools/RootTools/interface/MiscTools.h"
-// #include "AnalysisTools/LanguageTools/interface/is_zero.h"
-// #include "AnalysisTools/LanguageTools/interface/is_equal.h"
+#include "AnalysisTools/LanguageTools/interface/is_zero.h"
+#include "AnalysisTools/LanguageTools/interface/is_equal.h"
 #include "AnalysisTools/LanguageTools/interface/LanguageTools.h"
 
 // miscellaneous helper and functions for ROOT related operations (uses ROOT name conventions)
@@ -234,7 +234,7 @@ namespace rt
     // Divide with error
     std::pair<double, double> DivideWithError(const std::pair<double, double>& v1, const std::pair<double, double>& v2)
     {
-        if (is_equal(v2.first, 0.0))
+        if (lt::is_zero(v2.first))
         {
             throw std::runtime_error("[rt::DivideWithError] Error: attempting to divide by zero!");
         }

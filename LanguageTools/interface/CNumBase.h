@@ -33,6 +33,6 @@ class CNumBase {
 };
 
 // include the template definitions
-#include "CNumBase.impl.h"
+#include "AnalysisTools/LanguageTools/src/CNumBase.impl.h"
 
 #endif // #define CNumBase_h

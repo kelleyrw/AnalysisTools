@@ -6,12 +6,10 @@
 
 // c++ includes
 #include <string>
-// #include <map>
-// #include <vector>
+#include <map>
+#include <vector>
 
 // ROOT includes
-// #include "TFile.h"
-// #include "TH1.h"
 #include "TChain.h"
 
 // namespace rt --> root tools

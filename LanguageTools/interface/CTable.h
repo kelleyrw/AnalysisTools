@@ -91,6 +91,6 @@ class CTable{
 std::ostream& operator << (std::ostream& os, CTable& table);
 
 // for the templates functions
-#include "CTable.impl.h"
+#include "AnalysisTools/LanguageTools/src/CTable.impl.h"
 
 #endif // #define CTable_H

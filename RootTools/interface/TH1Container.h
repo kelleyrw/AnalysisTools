@@ -72,7 +72,7 @@ namespace rt
             // get a list of all the histograms
             std::vector<std::string> GetListOfHistograms() const;
 
-            // a simple viewer function (only interactive version)
+            // a simple viewer function (only interactive version -- not ported over yet)
             //void View();
 
             // scale all the histograms in the container 

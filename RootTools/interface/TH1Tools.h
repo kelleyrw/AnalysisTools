@@ -78,7 +78,7 @@ namespace rt
     // print the histogram to eps/png/pdf
     void Print
     (
-         const TH1* const hist_ptr, 
+         TH1* const hist_ptr, 
          const std::string& dir_name, 
          const std::string& suffix = "png", 
          const std::string& file_name = "", 

@@ -533,7 +533,7 @@ namespace rt
     }
 
     // Add Hists and return new hist (client is owner of the TH1*)
-    TH1* AddHists(TH1* const h1, const TH1* h2, const std::string& name, const std::string& title)
+    TH1* AddHists(TH1* const h1, TH1* const h2, const std::string& name, const std::string& title)
     {
         // check that hists are valid
         if (!h1 || !h2)

@@ -514,8 +514,8 @@ namespace rt
 
     void TH1Container::Print(const std::string& dir_name, const std::string& suffix, const std::string& option, bool logy) const
     {
-        //rt::mkdir(dir_name, /*force=*/true);
-        //rt::Print(m_pimpl->hist_map, dir_name, suffix, option, logy);
+//         rt::mkdir(dir_name, /*force=*/true);
+//         rt::Print(m_pimpl->hist_map, dir_name, suffix, option, logy);
         if (not (suffix == "eps" or suffix == "png" or suffix == "pdf" ))
         {
             cout << "suffix " << suffix << " not valid!  No print." << endl;

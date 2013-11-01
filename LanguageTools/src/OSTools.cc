@@ -128,6 +128,47 @@ namespace lt
         return file_name;
     }
 
+    // Get a vector of the filenames in a directory
+    std::vector<std::string> get_list_of_files(const std::string &path, const bool show_hidden_files)
+    {
+        namespace fs = boost::filesystem;
+
+        std::vector<std::string> result;
+        if (fs::exists(path))
+        {
+            if (fs::is_directory(path))
+            {
+                // for each filesystem object in this directory
+                // (directories, files, other)
+                for (fs::directory_iterator dir_itr(path), dir_end; dir_itr != dir_end; ++dir_itr)
+                {
+                    // if its a file, add it to our list
+                    if (fs::is_regular_file(dir_itr->status()))
+                    {
+                        std::string file_name = dir_itr->path().filename().string();
+                        // kludge until i figure out the more general way
+                        if (show_hidden_files)  
+                        {
+                            result.push_back(path + "/" + file_name);
+                        }
+                        else
+                        {
+                            if (file_name.at(0) != '.')  
+                            {
+                                result.push_back(path + "/" + file_name);
+                            }
+                        }
+                    }
+                }
+            }
+            else // not a directory, must be a file
+            {
+                result.push_back(path);
+            }
+        }
+        return result;
+    }
+
     // helper function for below
     std::string to_regex_copy(std::string mask)
     {

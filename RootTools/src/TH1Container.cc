@@ -59,6 +59,14 @@ namespace rt
     {
     }
 
+//     namespace impl
+//     {
+//         struct clone
+//         {
+//             TH1Ptr operator()(map<string, TH1Ptr>::const_iterator& iter) {return TH1Ptr(dynamic_cast<TH1*>(iter->second->Clone()));}
+//         };
+//     }
+
     TH1Container::TH1Container(const TH1Container& rhs)
         : m_pimpl(new TH1Container::impl)
     {

@@ -7,6 +7,9 @@
 // TH1Container
 #include "AnalysisTools/RootTools/interface/TH1Container.h"
 
+// TH1Overlay
+#include "AnalysisTools/RootTools/interface/TH1Overlay.h"
+
 // MiscTools
 #include "AnalysisTools/RootTools/interface/MiscTools.h"
 

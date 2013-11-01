@@ -12,7 +12,6 @@
         gSystem->Load(Form("%s/libAnalysisToolsRootTools.%s", cmssw_lib.Data(), dy_suffix.Data()));
 
         gSystem->AddIncludePath(Form("-I%s/AnalysisTools/LanguageTools/interface", cmssw_base.Data()));
-        cout << Form("%s/libAnalysisToolsLanguageTools.%s", cmssw_lib.Data(), dy_suffix.Data()) << endl;
         gSystem->Load(Form("%s/libAnalysisToolsLanguageTools.%s", cmssw_lib.Data(), dy_suffix.Data()));
     }
 }

@@ -6,6 +6,13 @@
 
 namespace lt
 {
+
+#if __cplusplus < 201103L // c++11 has std::copy_if
+    // copy a container filtering on predicate
+    template <typename InputIterator, typename OutputIterator, typename Predicate>
+    OutputIterator copy_if(InputIterator first, InputIterator last, OutputIterator dest, Predicate p);
+#endif
+
     // filter the container
     template <typename Container, typename Predicate>
     Container filter_container(const Container &c, Predicate p);

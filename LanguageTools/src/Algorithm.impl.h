@@ -5,12 +5,33 @@
 
 namespace lt
 {
+#if __cplusplus < 201103L // c++11 has std::copy_if
+    // copy a container filtering on predicate
+    template <typename InputIterator, typename OutputIterator, typename Predicate>
+    OutputIterator copy_if(InputIterator first, InputIterator last, OutputIterator dest, Predicate p)
+    {
+        for(;first != last; ++first)
+        {
+            if(p(*first))
+            {
+                *dest = *first;
+                ++dest;
+            }
+        }
+        return dest;
+    }
+#endif
+
     // filter the container
-    template<typename Container, typename Predicate>
+    template <typename Container, typename Predicate>
     Container filter_container(const Container &c, Predicate p)
     {
         Container result;
+#if __cplusplus < 201103L // c++11 has std::copy_if
+        lt::copy_if(c.begin(), c.end(), std::back_inserter(result), p);
+#else
         std::copy_if(c.begin(), c.end(), std::back_inserter(result), p);
+#endif
         return result;
     }
 
@@ -24,7 +45,7 @@ namespace lt
     }
 
     // delete a pointer 
-    template< typename T >
+    template <typename T>
     struct delete_ptr : public std::unary_function<bool,T>
     {
        bool operator()(T* ptr) const {delete ptr; return true;}

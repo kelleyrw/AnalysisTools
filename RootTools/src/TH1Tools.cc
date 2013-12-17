@@ -50,7 +50,7 @@ namespace rt
         {
             cout << "[rt::GetMapOfTH1s] Warning: '" << root_file_dir 
                 << " is not in the ROOT file (" << file->GetName() 
-                << "). Returning empty map of hists" << endl;
+                << "). Returning empty map of hists" << std::endl;
             return hist_map;
         }
         for (TObjLink* link = gDirectory->GetListOfKeys()->FirstLink(); link != NULL; link = link->Next())
@@ -92,7 +92,7 @@ namespace rt
         {
             cout << "[rt::GetVectorOfTH1s] Warning: '" << root_file_dir 
                 << " is not in the ROOT file (" << file->GetName() 
-                << "). Returning empty vector of hists" << endl;
+                << "). Returning empty vector of hists" << std::endl;
             return hist_vec;
         }
         for (TObjLink* link = gDirectory->GetListOfKeys()->FirstLink(); link != NULL; link = link->Next())
@@ -813,7 +813,7 @@ namespace rt
         return hist_ptr->GetBinContent(bin);
     }
 
-    //  find the bin content 
+    // find the bin content 
     double GetBinContent2D(TH2* const hist_ptr, const float x, const float y)
     {
         if (!hist_ptr)
@@ -823,6 +823,16 @@ namespace rt
         int xbin = hist_ptr->GetXaxis()->FindBin(x);
         int ybin = hist_ptr->GetYaxis()->FindBin(y);
         return hist_ptr->GetBinContent(xbin, ybin);
+    }
+
+    double GetBinContent2D(TH1* const hist_ptr, const float x, const float y)
+    {
+        TH2* h2d = dynamic_cast<TH2*>(hist_ptr);
+        if (!h2d)
+        {
+            throw std::runtime_error("[rt::GetBinContent2D] Error: Histograms is not 2D");
+        }
+        return GetBinContent2D(h2d, x, y);
     }
 
     // find the bin error 
@@ -846,6 +856,16 @@ namespace rt
         int xbin = hist_ptr->GetXaxis()->FindBin(x);
         int ybin = hist_ptr->GetYaxis()->FindBin(y);
         return hist_ptr->GetBinError(xbin, ybin);
+    }
+
+    double GetBinError2D(TH1* const hist_ptr, const float x, const float y)
+    {
+        TH2* h2d = dynamic_cast<TH2*>(hist_ptr);
+        if (!h2d)
+        {
+            throw std::runtime_error("[rt::GetBinError2D] Error: Histograms is not 2D");
+        }
+        return GetBinError2D(h2d, x, y);
     }
 
     // set the bin content  
@@ -1226,6 +1246,104 @@ namespace rt
             }
         }
         return index;
+    }
+
+    // fill the hist with overflow bins
+    void Fill1D(TH1& hist, double x, double w)
+    {   
+        x = std::min(hist.GetXaxis()->GetBinCenter(hist.GetXaxis()->GetLast()) , x);
+        x = std::max(hist.GetXaxis()->GetBinCenter(hist.GetXaxis()->GetFirst()), x);
+        hist.Fill(x, w);
+    }   
+
+    void Fill1D(TH1* hist_ptr, double x, double w)
+    {   
+        if (!hist_ptr)
+        {
+            std::cerr << "[rt::Fill] Warning: -- hist pointer is NULL! Doing nothing." << std::endl;
+            return;
+        }
+        Fill1D(*hist_ptr, x, w);
+    }   
+
+
+    // fill the 2D hist with overflow bins
+    void Fill2D(TH2& hist, double x, double y, double w)
+    {   
+        x = std::min(hist.GetXaxis()->GetBinCenter(hist.GetXaxis()->GetLast()) , x);
+        x = std::max(hist.GetXaxis()->GetBinCenter(hist.GetXaxis()->GetFirst()), x);
+        y = std::min(hist.GetYaxis()->GetBinCenter(hist.GetYaxis()->GetLast()) , y);
+        y = std::max(hist.GetYaxis()->GetBinCenter(hist.GetYaxis()->GetFirst()), y);
+        hist.Fill(x, y, w);
+    }
+
+    void Fill2D(TH2* hist_ptr, double x, double y, double w)
+    {   
+        if (!hist_ptr)
+        {
+            std::cerr << "[rt::Fill2D] Warning: -- hist pointer is NULL! Doing nothing." << std::endl;
+            return;
+        }
+        Fill2D(*hist_ptr, x, y, w);
+    }
+
+    void Fill2D(TH1* hist_ptr, double x, double y, double w)
+    {   
+        if (!hist_ptr)
+        {
+            std::cerr << "[rt::Fill2D] Warning: -- hist pointer is NULL! Doing nothing." << std::endl;
+            return;
+        }
+        if (TH2* h2d = dynamic_cast<TH2*>(hist_ptr))
+        {
+            Fill2D(h2d, x, y, w);
+        }
+        else
+        {
+            throw std::runtime_error("[rt::Fill2D] ERROR: -- hist pointer is not a TH2*!");
+        }
+        return;
+    }
+
+    // fill the 3D hist with overflow bins
+    void Fill3D(TH3& hist, double x, double y, double z, double w)
+    {   
+        x = std::min(hist.GetXaxis()->GetBinCenter(hist.GetXaxis()->GetLast()) , x);
+        x = std::max(hist.GetXaxis()->GetBinCenter(hist.GetXaxis()->GetFirst()), x);
+        y = std::min(hist.GetYaxis()->GetBinCenter(hist.GetYaxis()->GetLast()) , y);
+        y = std::max(hist.GetYaxis()->GetBinCenter(hist.GetYaxis()->GetFirst()), y);
+        z = std::min(hist.GetZaxis()->GetBinCenter(hist.GetZaxis()->GetLast()) , z);
+        z = std::max(hist.GetZaxis()->GetBinCenter(hist.GetZaxis()->GetFirst()), z);
+        Fill3D(hist, x, y, z, w);
+    }
+
+    void Fill3D(TH3* hist_ptr, double x, double y, double z, double w)
+    {   
+        if (!hist_ptr)
+        {
+            std::cerr << "[rt::Fill3D] Warning: -- hist pointer is NULL! Doing nothing." << std::endl;
+            return;
+        }
+        Fill3D(*hist_ptr, x, y, z, w);
+    }
+
+    // fill the 3D hist with overflow bins
+    void Fill3D(TH1* hist_ptr, double x, double y, double z, double w)
+    {   
+        if (!hist_ptr)
+        {
+            std::cerr << "[rt::Fill3D] Warning: -- hist pointer is NULL! Doing nothing." << std::endl;
+            return;
+        }
+        if (TH3* h3d = dynamic_cast<TH3*>(hist_ptr))
+        {
+            Fill3D(h3d, x, y, z, w);
+        }
+        else
+        {
+            throw std::runtime_error("[rt::Fill3D] ERROR: -- hist pointer is not a TH2*!");
+        }
+        return;
     }
 
 } // namespace rt

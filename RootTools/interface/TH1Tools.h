@@ -216,10 +216,12 @@ namespace rt
     // get the bin content with float values
     double GetBinContent1D(TH1* const h, const float x);
     double GetBinContent2D(TH2* const h, const float x, const float y);
+    double GetBinContent2D(TH1* const h, const float x, const float y);
     
     // get the bin error with float values
     double GetBinError1D(TH1* const h, const float x);
     double GetBinError2D(TH2* const h, const float x, const float y);
+    double GetBinError2D(TH1* const h, const float x, const float y);
     
     // set the bin content with float values
     void SetBinContent1D(TH1* h, const float x, const float value);
@@ -262,6 +264,23 @@ namespace rt
     
     // calculate the integral and Error
     std::pair<double, double> EntriesAndError(TH1* const h, const std::string& option = "");
+
+    // helper for filling histograms (overflow is last bin) 
+    // -------------------------------------------------------------------------------------------------//
+    
+    // fill the histogram with overflow bins
+    void Fill1D(TH1& hist, double x, double w = 1.0);
+    void Fill1D(TH1* hist, double x, double w = 1.0);
+
+    // fill the 2D histogram with overflow bins
+    void Fill2D(TH2& hist, double x, double y, double w = 1.0);
+    void Fill2D(TH2* hist, double x, double y, double w = 1.0);
+    void Fill2D(TH1* hist, double x, double y, double w = 1.0);
+
+    // fill the 3D histogram with overflow bins
+    void Fill3D(TH3& hist, double x, double y, double z, double w = 1.0);
+    void Fill3D(TH3* hist, double x, double y, double z, double w = 1.0);
+    void Fill3D(TH1* hist, double x, double y, double z, double w = 1.0);
     
     // helper for low level objects 
     // -------------------------------------------------------------------------------------------------//

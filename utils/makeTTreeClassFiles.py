@@ -892,9 +892,9 @@ extern CLASSNAME OBJNAME;
 
 def ImplString(branch_infos, use_cmssw):
 	if options.use_cmssw:
-		impl_str = """
-#include "CLASSNAME.h"
+		impl_str = """#include "CLASSNAME.h"
 #include <iostream>
+#include <unistd.h>
 
 // global object
 CLASSNAME OBJNAME;
@@ -958,7 +958,7 @@ TRIGGER_IMPL
             }
         }
     }
-}
+}\n
 
 namespace NAMESPACE
 {

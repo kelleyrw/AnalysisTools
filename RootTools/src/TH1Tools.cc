@@ -532,6 +532,39 @@ namespace rt
         return MakeEfficiencyProjectionPlot(num_hist_temp, den_hist_temp, axis, name, title, low, high, option);
     }
 
+    // run FitSlicesY and return resolution hist
+    TH1* MakeResolutionPlot(TH2* const res_hist, const std::string& name, const std::string& title)
+    {
+        // check that hists are valid
+        if (not res_hist)
+        {
+            throw std::runtime_error("[rt::MakeResoltuionHist] Error: Histogram is NULL");
+        }
+
+        // fit the vertical slices
+        res_hist->FitSlicesY();
+        TH1* h_sigma = dynamic_cast<TH1*>(gDirectory->Get(Form("%s_2", res_hist->GetName())));
+        if (not h_sigma) 
+        {
+            throw std::runtime_error("[rt::MakeResolutionPlot] Error: Sigma Histograms not found!");
+        }
+        if (not name.empty() ) {h_sigma->SetName(name.c_str());}
+        if (not title.empty()) {h_sigma->SetTitle(title.c_str());}
+        return h_sigma;
+    }
+
+    TH1* MakeResolutionPlot(TH1* const res_hist, const std::string& name, const std::string& title)
+    {
+        TH2* res_hist_temp = dynamic_cast<TH2*>(res_hist);
+
+        // check that hists are valid after cast
+        if (not res_hist_temp)
+        {
+            throw std::runtime_error("[rt::MakeResolutionPlot] Error: Histogram is NULL or not castable to a TH2*");
+        }
+        return MakeResolutionPlot(res_hist_temp, name, title);
+    }
+
     // Add Hists and return new hist (client is owner of the TH1*)
     TH1* AddHists(TH1* const h1, TH1* const h2, const std::string& name, const std::string& title)
     {

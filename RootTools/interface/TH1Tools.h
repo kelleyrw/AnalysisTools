@@ -214,14 +214,14 @@ namespace rt
     double Integral(TH2* const h, const float xlow, const float xhigh, const float ylow, const float yhigh, const std::string& option = "");
     
     // get the bin content with float values
-    double GetBinContent1D(TH1* const h, const float x);
-    double GetBinContent2D(TH2* const h, const float x, const float y);
-    double GetBinContent2D(TH1* const h, const float x, const float y);
+    double GetBinContent1D(const TH1* const h, const float x);
+    double GetBinContent2D(const TH2* const h, const float x, const float y);
+    double GetBinContent2D(const TH1* const h, const float x, const float y);
     
     // get the bin error with float values
-    double GetBinError1D(TH1* const h, const float x);
-    double GetBinError2D(TH2* const h, const float x, const float y);
-    double GetBinError2D(TH1* const h, const float x, const float y);
+    double GetBinError1D(const TH1* const h, const float x);
+    double GetBinError2D(const TH2* const h, const float x, const float y);
+    double GetBinError2D(const TH1* const h, const float x, const float y);
     
     // set the bin content with float values
     void SetBinContent1D(TH1* h, const float x, const float value);

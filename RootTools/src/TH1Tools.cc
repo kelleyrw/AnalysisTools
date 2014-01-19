@@ -803,31 +803,31 @@ namespace rt
     }
 
     // find the bin content  
-    double GetBinContent1D(TH1* const hist_ptr, const float x)
+    double GetBinContent1D(const TH1* const hist_ptr, const float x)
     {
         if (!hist_ptr)
         {
             throw std::runtime_error("[rt::GetBinContent1D] Error: hist pointer is NULL!");
         }
-        int bin = hist_ptr->GetXaxis()->FindBin(x);
+        const int bin = hist_ptr->GetXaxis()->FindBin(x);
         return hist_ptr->GetBinContent(bin);
     }
 
     // find the bin content 
-    double GetBinContent2D(TH2* const hist_ptr, const float x, const float y)
+    double GetBinContent2D(const TH2* const hist_ptr, const float x, const float y)
     {
         if (!hist_ptr)
         {
-            throw std::runtime_error("[rt::GetBinContent1D] Error: hist pointer is NULL!");
+            throw std::runtime_error("[rt::GetBinContent2D] Error: hist pointer is NULL!");
         }
-        int xbin = hist_ptr->GetXaxis()->FindBin(x);
-        int ybin = hist_ptr->GetYaxis()->FindBin(y);
+        const int xbin = hist_ptr->GetXaxis()->FindBin(x);
+        const int ybin = hist_ptr->GetYaxis()->FindBin(y);
         return hist_ptr->GetBinContent(xbin, ybin);
     }
 
-    double GetBinContent2D(TH1* const hist_ptr, const float x, const float y)
+    double GetBinContent2D(const TH1* const hist_ptr, const float x, const float y)
     {
-        TH2* h2d = dynamic_cast<TH2*>(hist_ptr);
+        const TH2* const h2d = dynamic_cast<const TH2* const >(hist_ptr);
         if (!h2d)
         {
             throw std::runtime_error("[rt::GetBinContent2D] Error: Histograms is not 2D");
@@ -836,31 +836,31 @@ namespace rt
     }
 
     // find the bin error 
-    double GetBinError1D(TH1* const hist_ptr, const float x)
+    double GetBinError1D(const TH1* const hist_ptr, const float x)
     {
         if (!hist_ptr)
         {
             throw std::runtime_error("[rt::GetBinError1D] Error: hist pointer is NULL!");
         }
-        int bin = hist_ptr->GetXaxis()->FindBin(x);
+        const int bin = hist_ptr->GetXaxis()->FindBin(x);
         return hist_ptr->GetBinError(bin);
     }
 
     //  find the bin error
-    double GetBinError2D(TH2* const hist_ptr, const float x, const float y)
+    double GetBinError2D(const TH2* const hist_ptr, const float x, const float y)
     {
         if (!hist_ptr)
         {
-            throw std::runtime_error("[rt::GetBinError1D] Error: hist pointer is NULL!");
+            throw std::runtime_error("[rt::GetBinError2D] Error: hist pointer is NULL!");
         }
-        int xbin = hist_ptr->GetXaxis()->FindBin(x);
-        int ybin = hist_ptr->GetYaxis()->FindBin(y);
+        const int xbin = hist_ptr->GetXaxis()->FindBin(x);
+        const int ybin = hist_ptr->GetYaxis()->FindBin(y);
         return hist_ptr->GetBinError(xbin, ybin);
     }
 
-    double GetBinError2D(TH1* const hist_ptr, const float x, const float y)
+    double GetBinError2D(const TH1* const hist_ptr, const float x, const float y)
     {
-        TH2* h2d = dynamic_cast<TH2*>(hist_ptr);
+        const TH2* const h2d = dynamic_cast<const TH2* const >(hist_ptr);
         if (!h2d)
         {
             throw std::runtime_error("[rt::GetBinError2D] Error: Histograms is not 2D");
@@ -875,7 +875,7 @@ namespace rt
         {
             throw std::runtime_error("[rt::SetBinContent1D]: Error: hist pointer is NULL!");
         }
-        int bin = hist_ptr->GetXaxis()->FindBin(x);
+        const int bin = hist_ptr->GetXaxis()->FindBin(x);
         hist_ptr->SetBinContent(bin, value);
     }
 
@@ -886,7 +886,7 @@ namespace rt
         {
             throw std::runtime_error("[rt::SetBinContent1D]: Error: hist pointer is NULL!");
         }
-        int bin = hist_ptr->GetXaxis()->FindBin(x);
+        const int bin = hist_ptr->GetXaxis()->FindBin(x);
         hist_ptr->SetBinContent(bin, value);
         hist_ptr->SetBinError(bin, error);
     }
@@ -900,8 +900,8 @@ namespace rt
         }
         if (TH2* h = dynamic_cast<TH2*>(hist_ptr))
         {
-            int xbin = h->GetXaxis()->FindBin(x);
-            int ybin = h->GetYaxis()->FindBin(y);
+            const int xbin = h->GetXaxis()->FindBin(x);
+            const int ybin = h->GetYaxis()->FindBin(y);
             h->SetBinContent(xbin, ybin, value);
         }
         else
@@ -919,8 +919,8 @@ namespace rt
         }
         if (TH2* h = dynamic_cast<TH2*>(hist_ptr))
         {
-            int xbin = h->GetXaxis()->FindBin(x);
-            int ybin = h->GetYaxis()->FindBin(y);
+            const int xbin = h->GetXaxis()->FindBin(x);
+            const int ybin = h->GetYaxis()->FindBin(y);
             h->SetBinContent(xbin, ybin, value);
             h->SetBinError(xbin, ybin, error);
         }
@@ -937,8 +937,8 @@ namespace rt
         {
             throw std::runtime_error("[rt::SetBinContent2D] Error: hist pointer is NULL!");
         }
-        int xbin = hist_ptr->GetXaxis()->FindBin(x);
-        int ybin = hist_ptr->GetYaxis()->FindBin(y);
+        const int xbin = hist_ptr->GetXaxis()->FindBin(x);
+        const int ybin = hist_ptr->GetYaxis()->FindBin(y);
         hist_ptr->SetBinContent(xbin, ybin, value);
     }
 
@@ -949,8 +949,8 @@ namespace rt
         {
             throw std::runtime_error("[rt::SetBinContent2D] Error: hist pointer is NULL!");
         }
-        int xbin = hist_ptr->GetXaxis()->FindBin(x);
-        int ybin = hist_ptr->GetYaxis()->FindBin(y);
+        const int xbin = hist_ptr->GetXaxis()->FindBin(x);
+        const int ybin = hist_ptr->GetYaxis()->FindBin(y);
         hist_ptr->SetBinContent(xbin, ybin, value);
         hist_ptr->SetBinError(xbin, ybin, error);
     }

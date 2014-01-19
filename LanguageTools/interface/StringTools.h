@@ -31,6 +31,12 @@ namespace lt
     // replace all lower case characters to upper case 
     std::string string_upper(const std::string& str);
 
+    // convert to double
+    double string_to_double(const std::string& str);
+
+    // convert to int
+    int string_to_int(const std::string& str);
+
     // split the string into a vector of string based on the deliminator 
     std::vector<std::string> string_split(const std::string& str, const std::string& delim = ",");
 

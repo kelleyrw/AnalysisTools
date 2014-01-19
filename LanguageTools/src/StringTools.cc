@@ -5,6 +5,7 @@
 
 // boost includes
 #include "boost/algorithm/string.hpp"
+#include "boost/lexical_cast.hpp"
 
 // ROOT includes
 #include "TString.h"
@@ -82,6 +83,18 @@ namespace lt
         std::string result(str);
         boost::to_upper(result);
         return result;
+    }
+
+    // convert to double
+    double string_to_double(const std::string& str)
+    {
+        return boost::lexical_cast<double>(str);
+    }
+
+    // convert to int
+    int string_to_int(const std::string& str)
+    {
+        return boost::lexical_cast<int>(str);
     }
 
     // character is space

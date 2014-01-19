@@ -170,6 +170,10 @@ namespace rt
         double high = -1.0,
         const std::string& option = ""
     );
+
+    // run FitSlicesY and return resolution hist
+    TH1* MakeResolutionPlot(TH2* const res_hist, const std::string& name, const std::string& title = "");
+    TH1* MakeResolutionPlot(TH1* const res_hist, const std::string& name, const std::string& title = "");
     
     // add Hists and return new hist (client is owner of the TH1*)
     // if title is empty, uses h1's name

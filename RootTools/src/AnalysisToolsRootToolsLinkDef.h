@@ -10,4 +10,12 @@
 #pragma link C++ class rt::TH1Container;
 #pragma link C++ class rt::TH1Overlay;
 
+// functions
+#pragma link C++ function rt::GetHistFromRootFile<TH1>;
+#pragma link C++ function rt::GetHistFromRootFile<TH1D>;
+#pragma link C++ function rt::GetHistFromRootFile<TH1F>;
+#pragma link C++ function rt::GetHistFromRootFile<TH2>;
+#pragma link C++ function rt::GetHistFromRootFile<TH2D>;
+#pragma link C++ function rt::GetHistFromRootFile<TH2F>;
+
 #endif

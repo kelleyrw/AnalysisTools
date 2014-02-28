@@ -79,6 +79,12 @@ namespace lt
     // create a folder (force is the equivalent of POSIX option "-p")
     bool mkdir(const std::string& path_name, bool force)
     {
+        // if pathname emty, do nothing...
+        if (path_name.empty())
+        {
+            return true;
+        }
+
         namespace fs = boost::filesystem;
         fs::path p = fs::path(path_name);
         if (!fs::exists(p))

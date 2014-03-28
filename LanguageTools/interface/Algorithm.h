@@ -4,14 +4,24 @@
 // helper functions for containers (uses c++ name conventions)
 // ------------------------------------------------------------------//
 
+#include <vector>
+#include <string>
+
 namespace lt
 {
-
 #if __cplusplus < 201103L // c++11 has std::copy_if
     // copy a container filtering on predicate
     template <typename InputIterator, typename OutputIterator, typename Predicate>
     OutputIterator copy_if(InputIterator first, InputIterator last, OutputIterator dest, Predicate p);
 #endif
+
+    // string of values for the array
+    // (elements of T must have << overloaded)
+    template <typename T>
+    std::string ArrayString(const std::vector<T>& v);
+
+    template <typename T>
+    std::string ArrayString(T const * const array, const int N);
 
     // filter the container
     template <typename Container, typename Predicate>

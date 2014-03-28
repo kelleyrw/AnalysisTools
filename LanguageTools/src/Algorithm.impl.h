@@ -2,6 +2,8 @@
 // ------------------------------------------------------------------//
 
 #include <algorithm>
+#include <sstream>
+#include <cassert>
 
 namespace lt
 {
@@ -21,6 +23,38 @@ namespace lt
         return dest;
     }
 #endif
+
+    template <typename T>
+    std::string ArrayString(const std::vector<T>& v)
+    {
+        std::stringstream os;
+        os << "{";
+        for (size_t i = 0; i < v.size(); ++i)
+        {
+            os << v.at(i);
+            if (i != (v.size() - 1)) os << ", ";
+        }
+        os << "}";
+        return os.str();
+    }
+
+
+    template <typename T>
+    std::string ArrayString(T const * const array, const int N)
+    {
+        // test boundary conditions
+        assert(!(array == NULL && N > 0));
+    
+        std::stringstream os;
+        os << "{";
+        for (int i = 0; i < N; ++i)
+        {
+            os << array[i];
+            if (i != (N - 1)) os << ", ";
+        }
+        os << "}";
+        return os.str();
+    }
 
     // filter the container
     template <typename Container, typename Predicate>

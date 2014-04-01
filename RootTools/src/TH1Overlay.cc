@@ -959,22 +959,6 @@ namespace rt
             }
         }
 
-        // set the y axis boundaries
-        if (m_pimpl->hist_stack->GetHists() && !m_pimpl->hist_stack->GetHists()->IsEmpty())
-        {
-            m_pimpl->hist_stack->GetHists()->SetOwner(false);
-            if (m_pimpl->yaxis_min <= m_pimpl->yaxis_max)
-            {
-                m_pimpl->hist_stack->SetMinimum(m_pimpl->yaxis_min);
-                m_pimpl->hist_stack->SetMaximum(m_pimpl->yaxis_max);
-            }
-            else
-            {
-                m_pimpl->hist_stack->SetMinimum(min_height);
-                m_pimpl->hist_stack->SetMaximum(max_height*1.4);
-            }
-        }
-
         // this is a kludge to get the annoying THStack's blank histogram from showing up
         m_pimpl->hist_stack->Draw("goff");
         if (m_pimpl->hist_stack->GetHistogram())
@@ -982,6 +966,24 @@ namespace rt
             m_pimpl->hist_stack->GetHistogram()->SetLineColor(gStyle->GetFrameLineColor());
             m_pimpl->hist_stack->GetHistogram()->SetLineWidth(gStyle->GetFrameLineWidth());
             m_pimpl->hist_stack->GetHistogram()->SetLineStyle(gStyle->GetFrameLineStyle());
+        }
+        
+        // set the y axis boundaries
+        if (m_pimpl->hist_stack->GetHists() && !m_pimpl->hist_stack->GetHists()->IsEmpty())
+        {
+            m_pimpl->hist_stack->GetHists()->SetOwner(false);
+            for (int hist_index = 0; hist_index < m_pimpl->hist_stack->GetStack()->GetEntries(); hist_index++)
+            {
+                TH1 *hist_ptr = dynamic_cast<TH1*>(m_pimpl->hist_stack->GetStack()->At(hist_index));
+                if (m_pimpl->yaxis_min <= m_pimpl->yaxis_max)
+                {
+                    hist_ptr->GetYaxis()->SetRangeUser(m_pimpl->yaxis_min, m_pimpl->yaxis_max);
+                }
+                else
+                {
+                    hist_ptr->GetYaxis()->SetRangeUser(min_height, max_height*1.4);
+                }
+            }
         }
 
         return;

@@ -78,7 +78,7 @@ try
     const std::string pset_filename = argv[1];
     if (!edm::readPSetsFrom(argv[1])->existsAs<edm::ParameterSet>("process"))
     {
-        throw std::invalid_argument(Form("[stop_interp_plots] Error: ParametersSet 'process' is missing in your configuration file"));
+        throw std::invalid_argument(Form("[cms2tools_keep_branches] Error: ParametersSet 'process' is missing in your configuration file"));
     }
 
     // get the python configuration
@@ -86,7 +86,7 @@ try
     const edm::ParameterSet& cfg     = process.getParameter<edm::ParameterSet>("cms2tools_drop_branches");
 
     // get the inputs 
-    const long long max_events                           = cfg.getParameter<long long>("max_events");
+    const long long max_events                      = cfg.getParameter<long long>("max_events");
     const std::vector<std::string> input_files      = cfg.getParameter<std::vector<std::string> >("input_files");
     const std::string tree_name                     = cfg.getParameter<std::string>("tree_name");
     const std::string output_file                   = cfg.getParameter<std::string>("output_file");

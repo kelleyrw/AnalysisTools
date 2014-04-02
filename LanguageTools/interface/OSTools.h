@@ -49,6 +49,9 @@ namespace lt
     // get the file name from a full path (i.e. /path/to/file.txt --> file.txt) 
     std::string filename(const std::string& full_name);
 
+    // get the filename file without extension from a full path (i.e. /path/to/file.txt --> /path/to/file) 
+    std::string filestem(const std::string& full_name);
+
     // get the path from a full path (i.e. /path/to/file.txt --> /path/to) 
     std::string dirname(const std::string& full_name);
 

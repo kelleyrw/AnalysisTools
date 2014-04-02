@@ -240,6 +240,13 @@ namespace lt
         return fs::path(full_name).filename().string();
     }
 
+    // get the filename file without extension from a full path (i.e. /path/to/file.txt --> /path/to/file) 
+    std::string filestem(const std::string& full_name)
+    {
+        if (dirname(full_name).empty()) return basename(full_name);
+        return dirname(full_name) + "/" + basename(full_name); 
+    }
+
     // get the path from a full path (i.e. /path/to/file.txt --> /path/to) 
     std::string dirname(const std::string& full_name)
     {

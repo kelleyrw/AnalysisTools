@@ -117,10 +117,10 @@ try
     {
         TFile old_file(input_files.at(i).c_str());
         TTree * const old_tree = static_cast<TTree*>(old_file.Get(tree_name.c_str()));
-
+    
         // drop branches
         old_tree->SetBranchStatus("*", 0);
-
+    
         // keep branches
         std::vector<std::string> all_aliases  = GetListOfAlisesFromTree(*old_tree);
         std::vector<std::string> keep_aliases = FilterStringVector(all_aliases, keep_alias_names);
@@ -129,14 +129,14 @@ try
             const std::string branch_name = GetBranchNameFromAlias(*old_tree, alias);
             old_tree->SetBranchStatus(branch_name.c_str(), 1);
         }
-
+    
         // clone the tree
         const std::string temp_output_file = Form("%s_%lu.root", lt::filestem(output_file).c_str(), i);
         temp_output_files.push_back(temp_output_file);
         lt::mkdir(lt::dirname(temp_output_file), /*force*/true);
         TFile new_file(temp_output_file.c_str(), "RECREATE");
         TTree * const new_tree = old_tree->CopyTree(selection.c_str(), "");
-
+    
         // drop alias
         std::vector<std::string> drop_aliases;
         drop_aliases.reserve(all_aliases.size());
@@ -146,16 +146,16 @@ try
              TNamed * const alias_ptr = (TNamed*)new_tree->GetListOfAliases()->FindObject(alias.c_str());
              new_tree->GetListOfAliases()->Remove(alias_ptr);
         }
-
+    
         // write output
         std::cout << "[cms2tools_keep_branches] writing temp file: " << temp_output_file << std::endl;
         new_tree->Write();
     }
-
+    
     // merge trees together
     std::cout << "[cms2tools_keep_branches] merging temp file to: " << output_file << std::endl;
     int hadd_result = rt::hadd(output_file, temp_output_files);
-
+    
     // test result
     if (hadd_result==0)
     {
@@ -164,7 +164,7 @@ try
         {
             lt::remove_file(temp_file);
         }
-
+    
         // test output
         std::cout << "[cms2tools_keep_branches] branches kept:\n";
         TFile file(output_file.c_str());

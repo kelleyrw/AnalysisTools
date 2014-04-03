@@ -299,7 +299,7 @@ namespace rt
     // copy the index.php file to dirname
     void CopyIndexPhp(const std::string& target_dir)
     {
-        if (!lt::file_exists(lt::dirname(target_dir)))
+        if (!lt::file_exists(target_dir))
         {
             throw std::runtime_error("[rt::CopyIndexPhp] Error : destination directory doesn't exist");
         }

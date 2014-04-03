@@ -1,0 +1,15 @@
+<flags CPPDEFINES="CMS2_USE_CMSSW=1"/>
+<use name="boost"/>
+<use name="root"/>
+<use name="FWCore/FWLite"/>
+<use name="AnalysisTools/RootTools"/>
+<use name="AnalysisTools/LanguageTools"/>
+<use name="CMS2/NtupleMacrosCore"/>
+<export>
+  <use name="root"/>
+  <use name="FWCore/FWLite"/>
+  <use name="AnalysisTools/RootTools"/>
+  <use name="AnalysisTools/LanguageTools"/>
+  <use name="CMS2/NtupleMacrosCore"/>
+  <lib name="1"/>
+</export>

@@ -10,6 +10,7 @@
 #include "TChain.h"
 #include "TBranch.h"
 #include "TSystem.h"
+#include "TEventList.h"
 
 // CMSSW includes
 #include "FWCore/FWLite/interface/AutoLibraryLoader.h"
@@ -90,6 +91,7 @@ try
     const std::vector<std::string> input_files      = cfg.getParameter<std::vector<std::string> >("input_files");
     const std::string tree_name                     = cfg.getParameter<std::string>("tree_name");
     const std::string output_file                   = cfg.getParameter<std::string>("output_file");
+    const std::string selection                     = cfg.getParameter<std::string>("selection");
     const std::vector<std::string> keep_alias_names = cfg.getParameter<std::vector<std::string> >("keep_alias_names");
 
     // print the inputs  
@@ -99,6 +101,7 @@ try
     std::cout << "tree_name        = " << tree_name                         << "\n";
     std::cout << "output_file      = " << output_file                       << "\n";
     std::cout << "keep_alias_names = " << lt::ArrayString(keep_alias_names) << "\n";
+    std::cout << "selection        = " << selection                         << "\n";
     std::cout << std::endl;
 
     // peform the skim
@@ -132,7 +135,7 @@ try
         temp_output_files.push_back(temp_output_file);
         lt::mkdir(lt::dirname(temp_output_file), /*force*/true);
         TFile new_file(temp_output_file.c_str(), "RECREATE");
-        TTree * const new_tree = old_tree->CloneTree(max_events, "fast");
+        TTree * const new_tree = old_tree->CopyTree(selection.c_str(), "");
 
         // drop alias
         std::vector<std::string> drop_aliases;

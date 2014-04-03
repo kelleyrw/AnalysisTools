@@ -23,11 +23,19 @@ process.cms2tools_drop_branches = cms.PSet(
 	## output file name 
 	output_file = cms.string("test.root"),
 
+	## selection (same as TTree::Draw)
+# 	selection = cms.string(""),
+	selection = cms.string(
+		"(Sum$(genps_status==3 && genps_id==11)>=1 && Sum$(genps_status==3 && genps_id==-11)>=1) || "
+		"(Sum$(genps_status==3 && genps_id==13)>=1 && Sum$(genps_status==3 && genps_id==-13)>=1) || "
+		"(Sum$(genps_status==3 && genps_id==15)>=1 && Sum$(genps_status==3 && genps_id==-15)>=1)"
+	),
+
 	## aliases to keep (overides anything in drop_alias_names)
 	## have to use regegular expression
 	## see: http://www.cplusplus.com/reference/regex/ECMAScript/
 	keep_alias_names = cms.vstring(
 		"genps(.*)",
-		"evt_(.*)",
+# 		"evt_(.*)",
 	),
 )

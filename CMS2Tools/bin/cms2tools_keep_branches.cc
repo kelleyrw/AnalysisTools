@@ -20,6 +20,7 @@
 // Tools
 #include "AnalysisTools/RootTools/interface/RootTools.h"
 #include "AnalysisTools/LanguageTools/interface/LanguageTools.h"
+#include "boost/program_options.hpp"
 
 // ------------------------------------------------------------------------------------ //
 // helper functions 
@@ -69,30 +70,74 @@ try
     // parse the inputs
     // -------------------------------------------------------------------------------------------------//
 
-    // check that the python is passed
-    if (argc < 2)
-    {
-        throw std::invalid_argument(Form("Usage : %s [parameters.py]", argv[0]));
-    }
-
-    // check that pset contains "process" 
-    const std::string pset_filename = argv[1];
-    if (!edm::readPSetsFrom(argv[1])->existsAs<edm::ParameterSet>("process"))
-    {
-        throw std::invalid_argument(Form("[cms2tools_keep_branches] Error: ParametersSet 'process' is missing in your configuration file"));
-    }
-
-    // get the python configuration
-    const edm::ParameterSet& process = edm::readPSetsFrom(pset_filename)->getParameter<edm::ParameterSet>("process");
-    const edm::ParameterSet& cfg     = process.getParameter<edm::ParameterSet>("cms2tools_drop_branches");
-
     // get the inputs 
-    const long long max_events                      = cfg.getParameter<long long>("max_events");
-    const std::vector<std::string> input_files      = cfg.getParameter<std::vector<std::string> >("input_files");
-    const std::string tree_name                     = cfg.getParameter<std::string>("tree_name");
-    const std::string output_file                   = cfg.getParameter<std::string>("output_file");
-    const std::string selection                     = cfg.getParameter<std::string>("selection");
-    const std::vector<std::string> keep_alias_names = cfg.getParameter<std::vector<std::string> >("keep_alias_names");
+    std::string pset_filename = "";
+    long long max_events = -1; 
+    std::vector<std::string> input_files; 
+    std::string tree_name = ""; 
+    std::string output_file = ""; 
+    std::string selection = ""; 
+    std::vector<std::string> keep_alias_names;
+
+    // parse arguments
+    namespace po = boost::program_options;
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help"             , "print this menu")
+        ("pset"             , po::value<std::string>(&pset_filename)->required()      , "REQUIRED: python configuration file"      )
+        ("max_events"       , po::value<long long>(&max_events)                       , "maximum number of events to skim"         )
+        ("input_files"      , po::value<std::vector<std::string> >(&input_files)      , "input ROOT files"                         )
+        ("tree_name"        , po::value<std::string>(&tree_name)                      , "name of the TTree"                        )
+        ("output_file"      , po::value<std::string>(&output_file)                    , "output ROOT file"                         )
+        ("selection"        , po::value<std::string>(&selection)                      , "selection in the form of TTree::Draw/Scan")
+        ("keep_alias_names" , po::value<std::vector<std::string> >(&keep_alias_names) , "Regexpression for aliases to keep"        )
+        ;
+    try
+    {
+        // first parse command line options
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+        if (vm.count("help")) 
+        {
+            std::cout << desc << "\n";
+            return 1;
+        }
+        po::notify(vm);
+
+        // get the inputs from pset
+
+        // check that pset contains "process" 
+        if (!edm::readPSetsFrom(pset_filename)->existsAs<edm::ParameterSet>("process"))
+        {
+            throw std::invalid_argument(Form("[cms2tools_keep_branches] Error: ParametersSet 'process' is missing in your configuration file"));
+        }
+
+        // get the python configuration
+        const edm::ParameterSet& process = edm::readPSetsFrom(pset_filename)->getParameter<edm::ParameterSet>("process");
+        const edm::ParameterSet& cfg     = process.getParameter<edm::ParameterSet>("cms2tools_drop_branches");
+
+        max_events       = cfg.getParameter<long long>("max_events");
+        input_files      = cfg.getParameter<std::vector<std::string> >("input_files");
+        tree_name        = cfg.getParameter<std::string>("tree_name");
+        output_file      = cfg.getParameter<std::string>("output_file");
+        selection        = cfg.getParameter<std::string>("selection");
+        keep_alias_names = cfg.getParameter<std::vector<std::string> >("keep_alias_names");
+
+        // now parse command line again to see if there are overrides
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::notify(vm);
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << "\nexiting" << std::endl;
+        std::cout << desc << "\n";
+        return 1;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown error!" << "\n";
+        return 1;
+    }
 
     // print the inputs  
     std::cout << "[cms2tools_keep_branches] inputs:\n";
@@ -111,9 +156,15 @@ try
     gSystem->Load("libFWCoreFWLite");
     AutoLibraryLoader::enable();
 
+    // number of events
+    TChain chain(tree_name.c_str());
+    for (const auto& file : input_files) chain.Add(file.c_str());
+    long long num_events_remaining = (max_events < 0 ? chain.GetEntries() : (max_events > chain.GetEntries() ? chain.GetEntries() : max_events));
+    std::cout << "[cms2tools_keep_branches] processing " << num_events_remaining << " events\n"; 
+
     // loop over files and make a TTree for each file 
     std::vector<std::string> temp_output_files;
-    for (size_t i = 0; i < input_files.size(); ++i)
+    for (size_t i = 0; i < input_files.size() && num_events_remaining > 0; ++i)
     {
         TFile old_file(input_files.at(i).c_str());
         TTree * const old_tree = static_cast<TTree*>(old_file.Get(tree_name.c_str()));
@@ -135,7 +186,8 @@ try
         temp_output_files.push_back(temp_output_file);
         lt::mkdir(lt::dirname(temp_output_file), /*force*/true);
         TFile new_file(temp_output_file.c_str(), "RECREATE");
-        TTree * const new_tree = old_tree->CopyTree(selection.c_str(), "");
+        TTree * const new_tree = old_tree->CopyTree(selection.c_str(), "", num_events_remaining);
+        num_events_remaining -= old_tree->GetEntries();
     
         // drop alias
         std::vector<std::string> drop_aliases;

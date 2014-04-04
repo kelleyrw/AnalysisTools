@@ -3,6 +3,8 @@
 //------------------------------------------------------------------------//
 
 #include "AnalysisTools/CMS2Tools/interface/LoadFWLite.h"
+#include "AnalysisTools/CMS2Tools/interface/DileptonChargeType.h"
+#include "AnalysisTools/CMS2Tools/interface/DileptonHypType.h"
 
 #ifdef __CINT__  // interpreter and ACLiC
 
@@ -16,11 +18,15 @@
 // namespaces
 #pragma link C++ namespace at;
 
-// typedefs
+// typedefs/enums
+#pragma link C++ enum at::DileptonHypType::value_type;
+#pragma link C++ enum at::DileptonChargeType::value_type;
 
 // templated classes
 
 // classes or structs
+#pragma link C++ struct at::DileptonHypType;
+#pragma link C++ struct at::DileptonChargeType;
 
 // functions
 #pragma link C++ function at::LoadFWLite;

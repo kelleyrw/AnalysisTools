@@ -37,31 +37,37 @@ namespace rt
          const bool logy = false
     );
 
-	// make a TChain from a path
-	TChain* MakeTChain
-	(
-		const std::string& glob, 
-		const std::string& treename = "Events", 
-		TChain* const chain_in = NULL, 
-		const bool verbose = false
-	);
+    // make a TChain from a path
+    TChain* MakeTChain
+    (
+        const std::string& glob, 
+        const std::string& treename = "Events", 
+        TChain* const chain_in = NULL, 
+        const bool verbose = false
+    );
 
-	// create a chain from a comma serperated list (e.g. "file1,file2,...")
-    // NOTE: user is charge of deleting!
-	TChain* CreateTChainFromCommaSeperatedList
-	(
-		const std::string& str, 
-		const std::string& treename,
-		const std::string& prefix = "" 
-	);
+    // create a chain from a comma serperated list (e.g. "file1,file2,...")
+    TChain* CreateTChainFromCommaSeperatedList
+    (
+        const std::string& str, 
+        const std::string& treename,
+        const std::string& prefix = "" 
+    );
+
+    // create a chain from a vector of file name
+    TChain* CreateTChain
+    (
+        const std::string& treename,
+        const std::vector<std::string>& str_vec 
+    );
 
     // print list of files in a TChain
-    void PrintFilesFromTChain(TChain* chain);
+    void PrintFilesFromTChain(TChain * const chain);
     void PrintFilesFromTChain(const TChain& chain);
-    void PrintFilesFromTChain(std::vector<TChain*> chains);
+    void PrintFilesFromTChain(const std::vector<TChain*>& chains);
 
     // print list of files in a TChain
-    std::vector<std::string> GetFilesFromTChain(TChain* chain);
+    std::vector<std::string> GetFilesFromTChain(TChain* const chain);
 
     // add root files (returns 0 if successful) -- lower case to match the utility name
     int hadd(const std::string& target, const std::vector<std::string>& sources);

@@ -58,7 +58,6 @@ namespace rt
     }
 
     // create a chain from a comma serperated list (e.g. "file1,file2,...")
-    // NOTE: user is charge of deleting!
     TChain* CreateTChainFromCommaSeperatedList
     (
         const std::string& str, 
@@ -68,7 +67,7 @@ namespace rt
     {
         using namespace std;
         TChain* chain = NULL;
-        std::vector<std::string> files = lt::string_split(str, ",");    
+        std::vector<std::string> files = lt::string_split(lt::string_replace_all(str, " ", ""), ",");    
         for (size_t i = 0; i != files.size(); i++)
         {
             std::string full_path = prefix+files.at(i);
@@ -91,6 +90,25 @@ namespace rt
         return chain;
     }
 
+    // create a chain from a vector of file name
+    TChain* CreateTChain
+    (
+        const std::string& treename,
+        const std::vector<std::string>& str_vec 
+    )
+    {
+        TChain * const chain = new TChain(treename.c_str());
+        for (const auto& file : str_vec)
+        {
+            if (!lt::file_exists(file))
+            {
+                throw std::runtime_error(Form("[dy_plots] Error: %s does not exist!", file.c_str()));
+            }
+            chain->Add(file.c_str());
+        }
+        return chain;
+    }
+
     // print list of files in a TChain
     void PrintFilesFromTChain(const TChain& chain)
     {
@@ -104,7 +122,7 @@ namespace rt
     }
 
     // print list of files in a TChain
-    void PrintFilesFromTChain(TChain* chain)
+    void PrintFilesFromTChain(TChain* const chain)
     {
         if (!chain)
         {
@@ -116,7 +134,7 @@ namespace rt
     }
 
     // print list of files in a vector of TChain
-    void PrintFilesFromTChain(std::vector<TChain*> chains)
+    void PrintFilesFromTChain(const std::vector<TChain*>& chains)
     {
         for (std::vector<TChain*>::const_iterator ichain = chains.begin(); ichain != chains.end(); ichain++)
         {
@@ -125,7 +143,7 @@ namespace rt
     }
 
     // resturn a vector of files in a TChain
-    std::vector<std::string> GetFilesFromTChain(TChain* chain)
+    std::vector<std::string> GetFilesFromTChain(TChain* const chain)
     {
         if (!chain)
         {

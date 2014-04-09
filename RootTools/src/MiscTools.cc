@@ -100,7 +100,8 @@ namespace rt
         TChain * const chain = new TChain(treename.c_str());
         for (const auto& file : str_vec)
         {
-            if (!lt::file_exists(file))
+            const auto& list = lt::ls(file);
+            if (list.empty())
             {
                 throw std::runtime_error(Form("[dy_plots] Error: %s does not exist!", file.c_str()));
             }

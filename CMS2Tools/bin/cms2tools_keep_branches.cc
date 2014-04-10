@@ -157,9 +157,9 @@ try
     AutoLibraryLoader::enable();
 
     // number of events
-    TChain chain(tree_name.c_str());
-    for (const auto& file : input_files) chain.Add(file.c_str());
-    long long num_events_remaining = (max_events < 0 ? chain.GetEntries() : (max_events > chain.GetEntries() ? chain.GetEntries() : max_events));
+    TChain * const chain = rt::CreateTChain(tree_name, input_files);
+    input_files = rt::GetFilesFromTChain(chain);
+    long long num_events_remaining = (max_events < 0 ? chain->GetEntries() : (max_events > chain->GetEntries() ? chain->GetEntries() : max_events));
     rt::PrintFilesFromTChain(chain);
     std::cout << "[cms2tools_keep_branches] processing " << num_events_remaining << " events\n"; 
 

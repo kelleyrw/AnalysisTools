@@ -160,6 +160,7 @@ try
     TChain chain(tree_name.c_str());
     for (const auto& file : input_files) chain.Add(file.c_str());
     long long num_events_remaining = (max_events < 0 ? chain.GetEntries() : (max_events > chain.GetEntries() ? chain.GetEntries() : max_events));
+    rt::PrintFilesFromTChain(chain);
     std::cout << "[cms2tools_keep_branches] processing " << num_events_remaining << " events\n"; 
 
     // loop over files and make a TTree for each file 
@@ -206,7 +207,15 @@ try
     
     // merge trees together
     std::cout << "[cms2tools_keep_branches] merging temp file to: " << output_file << std::endl;
-    int hadd_result = rt::hadd(output_file, temp_output_files);
+    int hadd_result = 0;
+    if (temp_output_files.size()==1)
+    {
+        hadd_result = (lt::move_file(temp_output_files.front(), output_file) ? 0 : -1);
+    }
+    else
+    {
+        hadd_result = rt::hadd(output_file, temp_output_files);
+    }
     
     // test result
     if (hadd_result==0)

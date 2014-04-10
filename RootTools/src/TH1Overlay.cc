@@ -456,6 +456,7 @@ namespace rt
         float   legend_height_per_entry;
         float   legend_offset;
         float   legend_text_size;
+        int     legend_ncol;
         string  legend_option;
         Color_t statbox_fill_color;
         float   profile_marker_size;
@@ -490,6 +491,7 @@ namespace rt
         , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
         , legend_offset(TH1Overlay::legend_offset_default)
         , legend_text_size(TH1Overlay::legend_text_size_default)
+        , legend_ncol(TH1Overlay::legend_ncol_default)
         , legend_option(TH1Overlay::legend_option_default)
         , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
         , profile_marker_size(TH1Overlay::profile_marker_size_default)
@@ -522,6 +524,7 @@ namespace rt
         , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
         , legend_offset(TH1Overlay::legend_offset_default)
         , legend_text_size(TH1Overlay::legend_text_size_default)
+        , legend_ncol(TH1Overlay::legend_ncol_default)
         , legend_option(TH1Overlay::legend_option_default)
         , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
         , profile_marker_size(TH1Overlay::profile_marker_size_default)
@@ -548,7 +551,7 @@ namespace rt
         , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
         , legend_offset(TH1Overlay::legend_offset_default)
         , legend_text_size(TH1Overlay::legend_text_size_default)
-        , legend_option(TH1Overlay::legend_option_default)
+        , legend_ncol(TH1Overlay::legend_ncol_default)
         , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
         , profile_marker_size(TH1Overlay::profile_marker_size_default)
         , profile_marker_style(TH1Overlay::profile_marker_style_default)
@@ -620,6 +623,7 @@ namespace rt
     float       TH1Overlay::legend_height_per_entry_default = 0.065;
     float       TH1Overlay::legend_offset_default           = 0.020;
     float       TH1Overlay::legend_text_size_default        = 0.030;
+    int         TH1Overlay::legend_ncol_default             = 2;
     const char* TH1Overlay::legend_option_default           = "LEP";
     Color_t     TH1Overlay::statbox_fill_color_default      = gStyle->GetFrameFillColor();
     float       TH1Overlay::profile_marker_size_default     = 0.8;
@@ -1072,6 +1076,7 @@ namespace rt
         m_pimpl->legend->SetFillStyle(0);
         m_pimpl->legend->SetBorderSize(0);
         m_pimpl->legend->SetTextSize(m_pimpl->legend_text_size);
+        m_pimpl->legend->SetNColumns(m_pimpl->legend_ncol);
 
         for (vector<HistAttributes>::const_iterator iter = m_pimpl->hist_vec.begin(); iter != m_pimpl->hist_vec.end(); iter++)
         {
@@ -1537,6 +1542,19 @@ namespace rt
     float TH1Overlay::GetLegendTextSize() const
     {
         return m_pimpl->legend_text_size;
+    }
+
+
+    // legend number of columns 
+    void TH1Overlay::SetLegendNCol(int ncol)
+    {
+        m_pimpl->legend_ncol = ncol;
+    }
+
+
+    float TH1Overlay::GetLegendNCol() const
+    {
+        return m_pimpl->legend_ncol;
     }
 
 

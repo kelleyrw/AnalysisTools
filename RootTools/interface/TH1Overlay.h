@@ -14,7 +14,7 @@
 
 // ---------------------------------------------------------------------------------------- //
 // TODO
-// 1.  explicit control of legend 
+// 1.  better interface for legend 
 // ---------------------------------------------------------------------------------------- //
 
 // uses ROOT name convecntions for classes and functions
@@ -173,6 +173,9 @@ namespace rt
         void SetLegendTextSize(float size);
         float GetLegendTextSize() const;
     
+        void SetLegendNCol(int ncol);
+        float GetLegendNCol() const;
+    
         void SetLegendOption(const std::string& option);
         std::string GetLegendOption() const;
     
@@ -211,6 +214,7 @@ namespace rt
         static float       legend_height_per_entry_default; 
         static float       legend_offset_default;           
         static float       legend_text_size_default;        
+        static int         legend_ncol_default;        
         static const char* legend_option_default;           
         static Color_t     statbox_fill_color_default;      
         static float       profile_marker_size_default;     

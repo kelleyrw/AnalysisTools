@@ -12,6 +12,9 @@ process.cms2tools_drop_branches = cms.PSet(
 	## max number of events to run on (-1 means all)
 	max_events = cms.int64(-1),
 
+	## merge the resulting files
+	do_merge = cms.bool(True),
+
 	## tree name
 	tree_name = cms.string("Events"),
 	

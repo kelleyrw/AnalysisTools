@@ -78,6 +78,7 @@ try
     std::string output_file = ""; 
     std::string selection = ""; 
     std::vector<std::string> keep_alias_names;
+    bool do_merge = false;
 
     // parse arguments
     namespace po = boost::program_options;
@@ -90,7 +91,8 @@ try
         ("tree_name"        , po::value<std::string>(&tree_name)                      , "name of the TTree"                        )
         ("output_file"      , po::value<std::string>(&output_file)                    , "output ROOT file"                         )
         ("selection"        , po::value<std::string>(&selection)                      , "selection in the form of TTree::Draw/Scan")
-        ("keep_alias_names" , po::value<std::vector<std::string> >(&keep_alias_names) , "Regexpression for aliases to keep"        )
+        ("keep_alias_names" , po::value<std::vector<std::string> >(&keep_alias_names) , "regexpression for aliases to keep"        )
+        ("do_merge"         , po::value<bool>(&do_merge)                              , "merge the skimmed files"                  )
         ;
     try
     {
@@ -122,6 +124,7 @@ try
         output_file      = cfg.getParameter<std::string>("output_file");
         selection        = cfg.getParameter<std::string>("selection");
         keep_alias_names = cfg.getParameter<std::vector<std::string> >("keep_alias_names");
+        do_merge         = cfg.getParameter<bool>("do_merge");
 
         // now parse command line again to see if there are overrides
         po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -207,32 +210,38 @@ try
     
     // merge trees together
     std::cout << "[cms2tools_keep_branches] merging temp file to: " << output_file << std::endl;
-    int hadd_result = 0;
     if (temp_output_files.size()==1)
     {
-        hadd_result = (lt::move_file(temp_output_files.front(), output_file) ? 0 : -1);
+        lt::move_file(temp_output_files.front(), output_file);
     }
-    else
+    else if (do_merge)
     {
-        hadd_result = rt::hadd(output_file, temp_output_files);
-    }
-    
-    // test result
-    if (hadd_result==0)
-    {
+        if (rt::hadd(output_file, temp_output_files))
+        {
+            // delete temp files
+            for (const auto& temp_file : temp_output_files)
+            {
+                lt::remove_file(temp_file);
+            }
+        }
+
         // delete temp files
         for (const auto& temp_file : temp_output_files)
         {
             lt::remove_file(temp_file);
         }
-    
-        // test output
-        std::cout << "[cms2tools_keep_branches] branches kept:\n";
-        TFile file(output_file.c_str());
-        TTree * const tree = static_cast<TTree*>(file.Get(tree_name.c_str()));
-        tree->GetListOfBranches()->ls();
-        tree->GetListOfAliases()->ls();
     }
+    else
+    {
+        output_file = temp_output_files.front();
+    }
+    
+    // test output
+    std::cout << "[cms2tools_keep_branches] branches kept:\n";
+    TFile file(output_file.c_str());
+    TTree * const tree = static_cast<TTree*>(file.Get(tree_name.c_str()));
+    tree->GetListOfBranches()->ls();
+    tree->GetListOfAliases()->ls();
 
     // done
     return 0;

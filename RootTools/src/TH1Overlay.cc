@@ -623,7 +623,7 @@ namespace rt
     float       TH1Overlay::legend_height_per_entry_default = 0.065;
     float       TH1Overlay::legend_offset_default           = 0.020;
     float       TH1Overlay::legend_text_size_default        = 0.030;
-    int         TH1Overlay::legend_ncol_default             = 2;
+    int         TH1Overlay::legend_ncol_default             = 1;
     const char* TH1Overlay::legend_option_default           = "LEP";
     Color_t     TH1Overlay::statbox_fill_color_default      = gStyle->GetFrameFillColor();
     float       TH1Overlay::profile_marker_size_default     = 0.8;

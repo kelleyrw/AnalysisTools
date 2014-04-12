@@ -170,7 +170,9 @@ namespace at
         {
             for (size_t idx2 = idx1 + 1; idx2 < gen_infos.size(); idx2++)
             {
-                const GenHyp gen_hyp = GenHyp(gen_infos.at(idx1), gen_infos.at(idx2));
+                const auto& gen_l1 = (gen_infos.at(idx1).p4.pt() > gen_infos.at(idx2).p4.pt() ? gen_infos.at(idx1) : gen_infos.at(idx2));
+                const auto& gen_l2 = (gen_infos.at(idx1).p4.pt() > gen_infos.at(idx2).p4.pt() ? gen_infos.at(idx2) : gen_infos.at(idx1));
+                const GenHyp gen_hyp = GenHyp(gen_l1, gen_l2);
                 result.push_back(gen_hyp);
             }
         }
@@ -180,7 +182,18 @@ namespace at
 
     bool Compare(const GenHyp& hyp1, const GenHyp& hyp2)
     {
-        return (hyp1.Type() < hyp2.Type());
+        if (hyp1.Type() != hyp2.Type())
+        {
+            return (hyp1.Type() < hyp2.Type());
+        }
+        else
+        {
+            // choose one closer to pdg value of mass of Z-boson
+            static const float Mz = 91.1876;
+            const float dm1 = fabs(hyp1.P4().mass() - Mz);
+            const float dm2 = fabs(hyp2.P4().mass() - Mz);
+            return (dm1 < dm2);
+        }
     }
 
 } // namepsace at

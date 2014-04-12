@@ -176,7 +176,8 @@ namespace rt
         }
 
         // build merger
-        TFileMerger file_merger(false);
+        //TFileMerger file_merger(false);
+        TFileMerger file_merger;
         for (size_t i = 0, size = sources.size(); i != size; i++) 
         { 
             file_merger.AddFile(sources.at(i).c_str());

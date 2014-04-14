@@ -44,7 +44,7 @@ namespace at
            
     bool GenHyp::IsFromZ() const
     {
-        return (m_lep1.mom_id==23 && m_lep2.mom_id==23);
+        return ((m_lep1.mom_id==22 && m_lep2.mom_id==22) || (m_lep1.mom_id==23 && m_lep2.mom_id==23));
     }
 
     bool GenHyp::IsEE() const
@@ -148,8 +148,7 @@ namespace at
 
                     // check kinematic
                     const LorentzVector& d_p4 = tas::genps_lepdaughter_p4().at(gen_idx).at(d_idx);
-                    if (d_p4.pt() < min_pt) {continue;}
-                    if (fabs(d_p4.eta()))   {continue;}
+                    if (d_p4.pt() < min_pt || fabs(d_p4.eta()) > max_eta) {continue;}
 
                     gen_info.d_idx = d_idx;
                     gen_info.d_id  = d_id;

@@ -23,7 +23,7 @@ namespace at
     int ScanChain
     (
         TChain* const chain, 
-        Analyzer analyzer, 
+        Analyzer& analyzer, 
         NtupleClass& ntuple_class,
         const long num_events,
         const std::string& goodrun_file_name,
@@ -247,7 +247,7 @@ namespace at
     int ScanChainWithFilename
     (
         TChain* const chain, 
-        Analyzer analyzer, 
+        Analyzer& analyzer, 
         NtupleClass& ntuple_class,
         const long num_events,
         const std::string& goodrun_file_name,

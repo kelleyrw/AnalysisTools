@@ -44,7 +44,7 @@ namespace at
            
     bool GenHyp::IsFromZ() const
     {
-        return ((m_lep1.mom_id==22 && m_lep2.mom_id==22) || (m_lep1.mom_id==23 && m_lep2.mom_id==23));
+        return (m_lep1.mom_id==23 && m_lep2.mom_id==23);
     }
 
     bool GenHyp::IsEE() const
@@ -120,6 +120,7 @@ namespace at
             const int abs_id        = abs(id); 
             const bool is_lep       = (abs_id == 11 || abs_id==13 || abs_id==15);
             if (not is_lep) {continue;}
+            const int charge        = -1*id/abs_id; // 11 == e^- and -11 == e+
 
             // kinematic cuts
             const LorentzVector& p4 = tas::genps_p4().at(gen_idx);
@@ -127,7 +128,7 @@ namespace at
 
             // keep this lepton
             const int mom_id = static_cast<int>(tas::genps_id_mother().at(gen_idx));
-            GenInfo gen_info = {p4, static_cast<int>(gen_idx), id, mom_id, -1, -1, LorentzVector(-999, -999, -999, -999)}; 
+            GenInfo gen_info = {p4, static_cast<int>(gen_idx), id, charge, mom_id, -1, -1, LorentzVector(-999, -999, -999, -999)}; 
 
             // e/mu block
             if (abs_id == 11 || abs_id == 13)

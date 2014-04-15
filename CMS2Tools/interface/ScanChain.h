@@ -13,11 +13,11 @@ namespace at
     int ScanChainTestAnalysis(long event);
 
     // Peform an analysis on a chain.
-    template <typename NtupleClass, typename Function>
+    template <typename NtupleClass, typename Analyzer>
     int ScanChain
     (
         TChain* const chain, 
-        Function analyze, 
+        Analyzer& analyze, 
         NtupleClass& ntuple_class,
         const long num_events = -1, 
         const std::string& goodrun_file_name = "",
@@ -30,11 +30,11 @@ namespace at
 
     // Peform an analysis on a chain.
     // Same as ScanChain except we pass the file name to the analysis object 
-    template <typename NtupleClass, typename Function>
+    template <typename NtupleClass, typename Analyzer>
     int ScanChainWithFilename
     (
         TChain* const chain, 
-        Function analyze, 
+        Analyzer& analyze, 
         NtupleClass& ntuple_class,
         const long num_events = -1, 
         const std::string& goodrun_file_name = "",

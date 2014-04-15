@@ -15,6 +15,7 @@ namespace at
         LorentzVector p4;
         int idx;
         int id;
+        int charge;
         int mom_id;
         int d_idx;
         int d_id;

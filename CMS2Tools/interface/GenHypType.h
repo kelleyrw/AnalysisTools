@@ -58,6 +58,8 @@ namespace at
             bool IsMuMu_IncludeTaus() const;
             bool IsOS() const;
             bool IsSS() const;
+            bool IsSF() const;
+            bool IsOSSF() const;
             bool IsAccepted(const double min_pt, const double max_eta) const;
 
         private:

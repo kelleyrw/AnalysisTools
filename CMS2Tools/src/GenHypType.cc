@@ -95,7 +95,17 @@ namespace at
     {
         return (m_lep1.id*m_lep2.id > 0);
     }
-           
+
+    bool GenHyp::IsSF() const
+    {
+        return (Type()==GenHypType::EE or Type()==GenHypType::MuMu or Type()==GenHypType::TauTau); 
+    }
+
+    bool GenHyp::IsOSSF() const
+    {
+        return (IsOS() && IsSF()); 
+    }
+
     bool GenHyp::IsAccepted(const double min_pt, const double max_eta) const
     {
         if (m_lep1.p4.pt() < min_pt)         {return false;}

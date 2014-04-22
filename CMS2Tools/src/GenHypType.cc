@@ -143,7 +143,7 @@ namespace at
                 for (size_t d_idx = 0; d_idx < tas::genps_lepdaughter_id().at(gen_idx).size(); ++d_idx)
                 {
                     // check flavor
-                    const int d_id = tas::genps_lepdaughter_id().at(gen_idx).at(d_idx);
+                    const int d_id      = tas::genps_lepdaughter_id().at(gen_idx).at(d_idx);
                     const bool d_is_lep = (abs(d_id) == 11 || abs(d_id)==13);
                     if (!d_is_lep) {continue;}
 

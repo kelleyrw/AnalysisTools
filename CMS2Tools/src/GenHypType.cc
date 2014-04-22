@@ -116,7 +116,7 @@ namespace at
             if (cms2.genps_status().at(gen_idx) != 3) {continue;}
 
             // only keep charged leptons
-            const int id            = static_cast<int>(tas::genps_id().at(gen_idx));
+            const int id            = tas::genps_id().at(gen_idx);
             const int abs_id        = abs(id); 
             const bool is_lep       = (abs_id == 11 || abs_id==13 || abs_id==15);
             if (not is_lep) {continue;}
@@ -127,7 +127,7 @@ namespace at
             if (p4.pt() < min_pt || fabs(p4.eta()) > max_eta) {continue;}
 
             // keep this lepton
-            const int mom_id = static_cast<int>(tas::genps_id_mother().at(gen_idx));
+            const int mom_id = tas::genps_id_mother().at(gen_idx);
             GenInfo gen_info = {p4, static_cast<int>(gen_idx), id, charge, mom_id, -1, -1, LorentzVector(-999, -999, -999, -999)}; 
 
             // e/mu block
@@ -172,7 +172,7 @@ namespace at
             {
                 const auto& gen_l1 = (gen_infos.at(idx1).p4.pt() > gen_infos.at(idx2).p4.pt() ? gen_infos.at(idx1) : gen_infos.at(idx2));
                 const auto& gen_l2 = (gen_infos.at(idx1).p4.pt() > gen_infos.at(idx2).p4.pt() ? gen_infos.at(idx2) : gen_infos.at(idx1));
-                const GenHyp gen_hyp = GenHyp(gen_l1, gen_l2);
+                const GenHyp gen_hyp(gen_l1, gen_l2);
                 result.push_back(gen_hyp);
             }
         }

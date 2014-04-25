@@ -153,17 +153,19 @@ namespace at
                 for (size_t d_idx = 0; d_idx < tas::genps_lepdaughter_id().at(gen_idx).size(); ++d_idx)
                 {
                     // check flavor
-                    const int d_id      = tas::genps_lepdaughter_id().at(gen_idx).at(d_idx);
-                    const bool d_is_lep = (abs(d_id) == 11 || abs(d_id)==13);
-                    if (!d_is_lep) {continue;}
+                    const int d_id = tas::genps_lepdaughter_id().at(gen_idx).at(d_idx);
+                    if (abs(d_id) == 11 || abs(d_id)==13)
+                    {
+                        // check kinematic
+                        const LorentzVector& d_p4 = tas::genps_lepdaughter_p4().at(gen_idx).at(d_idx);
+                        if (d_p4.pt() < min_pt || fabs(d_p4.eta()) > max_eta) {continue;}
 
-                    // check kinematic
-                    const LorentzVector& d_p4 = tas::genps_lepdaughter_p4().at(gen_idx).at(d_idx);
-                    if (d_p4.pt() < min_pt || fabs(d_p4.eta()) > max_eta) {continue;}
-
-                    gen_info.d_idx = d_idx;
-                    gen_info.d_id  = d_id;
-                    gen_info.d_p4  = d_p4;
+                        // assign values to gen_info
+                        gen_info.d_idx = d_idx;
+                        gen_info.d_id  = d_id;
+                        gen_info.d_p4  = d_p4;
+                        break;
+                    }
                 }
 
                 if (gen_info.idx >= 0) 
@@ -194,6 +196,7 @@ namespace at
     {
         if (hyp1.Type() != hyp2.Type())
         {
+            // choose MuMu over EE over TauTau 
             return (hyp1.Type() < hyp2.Type());
         }
         else

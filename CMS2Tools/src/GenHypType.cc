@@ -66,7 +66,7 @@ namespace at
     {
         if (IsTauTau())
         {
-            return(abs(m_lep1.d_id)==11 && abs(m_lep2.d_id)==11);
+            return (abs(m_lep1.d_id)==11 && abs(m_lep2.d_id)==11);
         }
         else
         {
@@ -78,7 +78,7 @@ namespace at
     {
         if (IsTauTau())
         {
-            return(abs(m_lep1.d_id)==13 && abs(m_lep2.d_id)==13);
+            return (abs(m_lep1.d_id)==13 && abs(m_lep2.d_id)==13);
         }
         else
         {
@@ -150,6 +150,15 @@ namespace at
             // need to add protection here to not get more than one lepton from the same tau
             if (abs_id == 15)
             {
+                // only consider tau --> nu_tau + nu_lep + lep events
+                // we count neutrino's because that guarantees that 
+	            // there is a corresponding lepton and that it comes from
+	            // a leptonic tau decay. You can get electrons from converted photons
+	            // which are radiated by charged pions from the tau decay but thats
+	            // hadronic and we don't care for those 
+                const auto& tds = tas::genps_lepdaughter_id().at(gen_idx);
+                if (std::find_if(tds.begin(), tds.end(), [](const int& id) {return (abs(id)==12 || abs(id)==14);}) == tds.end()) {continue;}
+
                 for (size_t d_idx = 0; d_idx < tas::genps_lepdaughter_id().at(gen_idx).size(); ++d_idx)
                 {
                     // check flavor

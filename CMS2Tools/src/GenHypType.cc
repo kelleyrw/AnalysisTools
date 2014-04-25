@@ -25,7 +25,9 @@ namespace at
 
     LorentzVector GenHyp::P4() const
     {
-        return (m_lep1.p4 + m_lep2.p4);
+        const LorentzVector& l1_p4 = abs(m_lep1.id)==15 ? m_lep1.d_p4 : m_lep1.p4;
+        const LorentzVector& l2_p4 = abs(m_lep2.id)==15 ? m_lep2.d_p4 : m_lep2.p4;
+        return (l1_p4 + l2_p4);
     }
 
     GenHypType::value_type GenHyp::Type() const

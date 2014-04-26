@@ -119,6 +119,30 @@ namespace rt
         return *this;
     }
 
+    TH1Container TH1Container::operator-(const TH1Container& rhs)
+    {
+        TH1Container temp(*this);
+        for (map<string, TH1Ptr>::const_iterator iter = rhs.m_pimpl->hist_map.begin(); iter != rhs.m_pimpl->hist_map.end(); iter++)
+        {
+            if (temp.Contains(iter->first))
+            {
+                temp[iter->first]->Add(iter->second.get(), -1.0);
+            }
+            else
+            {
+                temp.Add(iter->second.get());
+            }
+        }
+        return temp;
+    }
+
+    TH1Container& TH1Container::operator-=(const TH1Container& rhs)
+    {
+        TH1Container temp = this->operator-(rhs);
+        Swap(temp);
+        return *this;
+    }
+
     void TH1Container::Add(TH1* hist_ptr, const bool overwrite)
     {
         // do we already have the histogram?

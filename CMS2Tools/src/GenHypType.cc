@@ -66,25 +66,25 @@ namespace at
 
     bool GenHyp::IsEE_IncludeTaus() const
     {
-        if (IsTauTau())
+        switch(Type())
         {
-            return (abs(m_lep1.d_id)==11 && abs(m_lep2.d_id)==11);
-        }
-        else
-        {
-            return IsEE();
+            case GenHypType::EE    : return true; break;
+            case GenHypType::TauTau: return (abs(m_lep1.d_id)==11 && abs(m_lep2.d_id)==11); break;
+            case GenHypType::TauE  : return (abs(m_lep1.d_id)==11 && abs(m_lep2.id  )==11); break;
+            case GenHypType::ETau  : return (abs(m_lep1.id  )==11 && abs(m_lep2.d_id)==11); break;
+            default: return false;
         }
     }
 
     bool GenHyp::IsMuMu_IncludeTaus() const
     {
-        if (IsTauTau())
+        switch(Type())
         {
-            return (abs(m_lep1.d_id)==13 && abs(m_lep2.d_id)==13);
-        }
-        else
-        {
-            return IsMuMu();
+            case GenHypType::MuMu  : return true; break;
+            case GenHypType::TauTau: return (abs(m_lep1.d_id)==13 && abs(m_lep2.d_id)==13); break;
+            case GenHypType::TauMu : return (abs(m_lep1.d_id)==13 && abs(m_lep2.id  )==13); break;
+            case GenHypType::MuTau : return (abs(m_lep1.id  )==13 && abs(m_lep2.d_id)==13); break;
+            default: return false;
         }
     }
 

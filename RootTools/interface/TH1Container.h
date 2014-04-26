@@ -24,7 +24,9 @@ namespace rt
             TH1Container(const TH1Container& rhs);
             TH1Container& operator=(const TH1Container& rhs);
             TH1Container operator+(const TH1Container& rhs);
+            TH1Container operator-(const TH1Container& rhs);
             TH1Container& operator+=(const TH1Container& rhs);
+            TH1Container& operator-=(const TH1Container& rhs);
             void Swap(TH1Container& other);
 
             // add a histogram to the container 

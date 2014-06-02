@@ -894,7 +894,7 @@ def ImplString(branch_infos, use_cmssw):
 	if options.use_cmssw:
 		impl_str = """#include "CLASSNAME.h"
 #include <iostream>
-#include <unistd.h>
+#include "unistd.h"
 
 // global object
 CLASSNAME OBJNAME;
@@ -1034,6 +1034,7 @@ BRANCH_WRAPPER_CMSSW
 		impl_str = """
 #include "CLASSNAME.h"
 #include <iostream>
+#include "unistd.h"
 
 // global object
 CLASSNAME OBJNAME;

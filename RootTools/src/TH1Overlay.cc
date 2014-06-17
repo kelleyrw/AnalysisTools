@@ -552,6 +552,7 @@ namespace rt
         , legend_offset(TH1Overlay::legend_offset_default)
         , legend_text_size(TH1Overlay::legend_text_size_default)
         , legend_ncol(TH1Overlay::legend_ncol_default)
+        , legend_option(TH1Overlay::legend_option_default)
         , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
         , profile_marker_size(TH1Overlay::profile_marker_size_default)
         , profile_marker_style(TH1Overlay::profile_marker_style_default)

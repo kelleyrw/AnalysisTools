@@ -71,6 +71,7 @@ class smsPlotABS(object):
         #self.emptyHisto.GetYaxis().CenterTitle(True)
                 
     def DrawText(self):
+        # set bach mode
         #redraw axes
         self.c.RedrawAxis()
         # white background
@@ -126,7 +127,7 @@ class smsPlotABS(object):
         textMassLabel.Draw()
         self.c.textNLONLL = textMassLabel
         # BOXES LABEL
-			
+            
         textBoxesLabel= rt.TLatex(0.18,0.70,"%s" %self.boxes.replace("_"," "))
         textBoxesLabel.SetNDC()
         textBoxesLabel.SetTextAlign(13)

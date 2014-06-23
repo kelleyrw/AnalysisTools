@@ -3,6 +3,7 @@ from inputFile import *
 from smsPlotXSEC import *
 from smsPlotCONT import *
 from smsPlotBrazil import *
+import ROOT as rt
 
 if __name__ == '__main__':
     # read input arguments
@@ -14,6 +15,9 @@ if __name__ == '__main__':
     # read the config file
     fileIN = inputFile(filename)
     
+	# no graphics
+    rt.gROOT.SetBatch(True)
+
     # classic temperature histogram
     xsecPlot = smsPlotXSEC(modelname, fileIN.HISTOGRAM, fileIN.OBSERVED, fileIN.EXPECTED, fileIN.EXPECTED2, fileIN.ENERGY, fileIN.LUMI, fileIN.PRELIMINARY, fileIN.BOXES, "")
     xsecPlot.Draw()

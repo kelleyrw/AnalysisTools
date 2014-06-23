@@ -3,7 +3,6 @@ from array import *
 class sms():
 
     def __init__(self, modelname):
-        print modelname
         if modelname.find("T1tttt") != -1: self.T1tttt()
         if modelname.find("T1tbbb") != -1: self.T1tbbb()
         if modelname.find("T1ttbb") != -1: self.T1ttbb()

@@ -59,6 +59,9 @@ namespace rt
             TH1* operator [] (const char* hist_name) const;
             TH1* operator [] (const TString& hist_name) const;
 
+            template <typename THType>
+            THType& as(const std::string& hist_name) const {TH1* const h = Hist(hist_name); return *static_cast<THType*>(h);}
+
             // contains a hist?
             bool Contains(const std::string& hist_name) const;
 

@@ -93,6 +93,8 @@ namespace rt
             void SetLineColor(const Color_t color);
             void SetLineStyle(const Style_t style);
             void SetLineWidth(const Width_t width);
+            void SetFillColor(const Color_t color);
+            void SetFillStyle(const Style_t style);
             void SetMarkerColor(const Color_t color = 1);
             void SetMarkerSize(const Size_t size = 1);
             void SetMarkerStyle(const Style_t style = 1);

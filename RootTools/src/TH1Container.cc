@@ -455,6 +455,22 @@ namespace rt
         }
     }
 
+    void TH1Container::SetFillColor(const Color_t color)
+    {
+        for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+        {
+            iter->second->SetFillColor(color);
+        }
+    }
+
+    void TH1Container::SetFillStyle(const Style_t style)
+    {
+        for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+        {
+            iter->second->SetFillStyle(style);
+        }
+    }
+
     void TH1Container::SetLineWidth(const Width_t width)
     {
         for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
